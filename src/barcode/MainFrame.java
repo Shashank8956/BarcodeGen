@@ -2,8 +2,14 @@
 package barcode;
 
 import com.onbarcode.barcode.Code128;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 public class MainFrame extends javax.swing.JFrame {
 
@@ -191,11 +197,22 @@ public class MainFrame extends javax.swing.JFrame {
         Code128 barcode = new Code128();     //Barcode Type
         barcode.setData(str);                //Barcode String
         barcode.setX(2);                     //Barcode data text to encode
-        barcode.setBarcodeWidth(200f);
-        barcode.setBarcodeHeight(150f);
+        barcode.setBarcodeWidth(350f);
+        barcode.setBarcodeHeight(50f);
         try {
             // Generate barcode & encode into JPG format
-            barcode.drawBarcode("C:\\Users\\Spongebob\\Desktop\\barcode-code128.jpg"); 
+            barcode.drawBarcode("C:\\Users\\Spongebob\\Desktop\\barcode-code128.jpg");
+            
+            //Append that additional info
+            BufferedImage image = null;
+            image = ImageIO.read(new File("C:\\Users\\Spongebob\\Desktop\\barcode-code128.jpg"));
+            Graphics2D g = (Graphics2D) image.getGraphics();
+            g.setFont(new Font("default", Font.PLAIN, 14));
+            g.setColor(Color.BLACK);
+            g.drawString("wlsos", 310, 45);
+            g.dispose();
+
+		ImageIO.write(image, "png", new File("C:\\Users\\Spongebob\\Desktop\\barcode-code128.jpg"));
         } catch (Exception ex) {
             
         }
