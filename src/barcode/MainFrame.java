@@ -36,6 +36,8 @@ public class MainFrame extends javax.swing.JFrame {
         btn = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         tfOfset = new javax.swing.JFormattedTextField();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
 
         jFormattedTextField1.setText("jFormattedTextField1");
 
@@ -139,6 +141,8 @@ public class MainFrame extends javax.swing.JFrame {
         );
 
         tab.addTab("", new javax.swing.ImageIcon(getClass().getResource("/barcode/Home.png")), jPanel2, ""); // NOI18N
+        tab.addTab("tab2", jTabbedPane1);
+        tab.addTab("tab3", jTabbedPane2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -158,9 +162,17 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tfYearFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfYearFocusLost
+       
         str1 = tfYear.getText();
-        str = str1;
-        lheader.setText(str1);
+        if(str1!=null)
+        {
+            str = str1;
+            lheader.setText(str1);
+        }
+        else
+        {
+            lheader.setText("BARCODE");
+        }
     }//GEN-LAST:event_tfYearFocusLost
 
     private void tfModelFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfModelFocusLost
@@ -170,9 +182,9 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_tfModelFocusLost
 
     private void tfNumFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfNumFocusLost
-        str3 = tfNum.getText();
-        str = str1 + str2 + str3;
-        lheader.setText(str);
+            str3 = tfNum.getText();
+            str = str1 + str2 + str3;
+            lheader.setText(str);
     }//GEN-LAST:event_tfNumFocusLost
 
     private void btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionPerformed
@@ -216,7 +228,10 @@ public class MainFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainFrame().setVisible(true);
+                MainFrame mf = new MainFrame();
+                mf.setResizable(false);
+                mf.setLocationRelativeTo(null);
+                mf.setVisible(true);
             }
         });
     }
@@ -229,6 +244,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JLabel lheader;
     private javax.swing.JTabbedPane tab;
     private javax.swing.JTextField tfModel;
