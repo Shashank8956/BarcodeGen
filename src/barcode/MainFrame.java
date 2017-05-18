@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import org.jdesktop.xswingx.PromptSupport;
 
 public class MainFrame extends javax.swing.JFrame {
@@ -186,6 +187,7 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionPerformed
+        JFrame jf = new JFrame();
         Code128 barcode = new Code128();     //Barcode Type
         barcode.setData(str);                //Barcode String
         barcode.setX(2);                     //Barcode data text to encode
@@ -205,9 +207,16 @@ public class MainFrame extends javax.swing.JFrame {
             g.dispose();
 
             ImageIO.write(image, "png", new File("C:\\Users\\Spongebob\\Desktop\\barcode-code128.jpg"));
-        } catch (Exception ex) {
-
-        }
+        } catch (Exception ex) {}
+        
+        int input = JOptionPane.showConfirmDialog(jf
+               , "Print for " + str + "?"
+               ,"Confirm print"
+               ,JOptionPane.YES_NO_OPTION);
+        
+        if(input == JOptionPane.YES_NO_OPTION)
+            System.exit(0);
+        
     }//GEN-LAST:event_btnActionPerformed
 
     private void tfModelFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfModelFocusLost
