@@ -35,7 +35,7 @@ public class MainFrame extends javax.swing.JFrame {
     String pass = "root";
     String[] columnNames = {"No", "Model", "Info"};
     int count=1, make=0;
-    
+    String[] IMAGES;
     public MainFrame() {
         initComponents();
         PromptSupport.setPrompt("Month/Year", tfYear);
@@ -376,12 +376,14 @@ public class MainFrame extends javax.swing.JFrame {
         
         if(input == JOptionPane.YES_OPTION)
             {
+                IMAGES = new String[count];
                 for(int i=0; i<count; i++)
                 {   
                     System.out.println(make);
                     code = str1 + str2 + (make+i);
                     path = "C:\\Users\\Spongebob\\Desktop\\" + code + ".jpg";
-            
+                    IMAGES[i] = path;
+                    System.out.println("hi");
                     Code128 barcode = new Code128();                            //Barcode Type
                     barcode.setData(code);                                      //Barcode String
                     barcode.setX(2);                                            //Barcode data text to encode
@@ -402,6 +404,7 @@ public class MainFrame extends javax.swing.JFrame {
 
                     ImageIO.write(image, "jpg", new File(path));
                 }
+                manipulatePdf("C:\\Users\\Spongebob\\Desktop\\BarcodePDF.pdf");
                 System.exit(0);                                             // Replace this by jf.dispose();
             }
         else {
@@ -452,23 +455,22 @@ public class MainFrame extends javax.swing.JFrame {
         lheader.setText(str);
     }//GEN-LAST:event_tfNumFocusLost
 
-    /*private void manipulatePdf(String dest) throws Exception {
+    private void manipulatePdf(String dest) throws Exception {
         Image image = new Image(ImageDataFactory.create(IMAGES[0]));
         PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
         Document doc = new Document(pdfDoc, new PageSize(image.getImageWidth(), image.getImageHeight()));
         
         for (int i = 0; i < IMAGES.length; i++) {
             image = new Image(ImageDataFactory.create(IMAGES[i]));
-            image.setWidthPercent(80);
-            int w = (int)image.getImageWidth()*20/100;
-            pdfDoc.addNewPage(new PageSize(image.getImageWidth()-w, image.getImageHeight()));
+            //image.setWidthPercent(80);
+            pdfDoc.addNewPage(new PageSize(image.getImageWidth(), image.getImageHeight()));
             // Notice that now it is not necessary to set image position,
             // because images are not overlapped while adding.
             image.setFixedPosition(i + 1, 0, 0);
             doc.add(image);
         }
         doc.close();
-    }*/
+    }
     
     private void createTable()                                                  // Table + Database = Tab2
     {
