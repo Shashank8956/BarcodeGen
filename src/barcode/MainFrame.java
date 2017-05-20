@@ -17,6 +17,15 @@ import java.sql.DriverManager;
 import java.text.NumberFormat;
 import org.jdesktop.xswingx.PromptSupport;
 
+import java.io.IOException;
+import com.itextpdf.text.*;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Image;
+
 public class MainFrame extends javax.swing.JFrame {
 
     String str1, str2, str3, str = new String();
@@ -357,12 +366,8 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionPerformed
         JFrame jf = new JFrame();
-        //System.out.println(count+" "+make);
-        Code128 barcode = new Code128();     //Barcode Type
-        barcode.setData(str);                //Barcode String
-        barcode.setX(2);                     //Barcode data text to encode
-        barcode.setBarcodeWidth(350f);
-        barcode.setBarcodeHeight(50f);
+        String code, path;
+        
         try {
             int input = JOptionPane.showConfirmDialog(jf
                , "Print for " + str + "?"
@@ -371,20 +376,33 @@ public class MainFrame extends javax.swing.JFrame {
         
         if(input == JOptionPane.YES_OPTION)
             {
-                // Generate barcode & encode into JPG format
-                barcode.drawBarcode("C:\\Users\\Spongebob\\Desktop\\barcode-code128.jpg");
+                for(int i=0; i<count; i++)
+                {   
+                    System.out.println(make);
+                    code = str1 + str2 + (make+i);
+                    path = "C:\\Users\\Spongebob\\Desktop\\" + code + ".jpg";
+            
+                    Code128 barcode = new Code128();                            //Barcode Type
+                    barcode.setData(code);                                      //Barcode String
+                    barcode.setX(2);                                            //Barcode data text to encode
+                    barcode.setBarcodeWidth(350f);
+                    barcode.setBarcodeHeight(50f);
+                    
+                    // Generate barcode & encode into JPG format
+                    barcode.drawBarcode(path);
 
-                //Append that additional info
-                BufferedImage image = null;
-                image = ImageIO.read(new File("C:\\Users\\Spongebob\\Desktop\\barcode-code128.jpg"));
-                Graphics2D g = (Graphics2D) image.getGraphics();
-                g.setFont(new Font("default", Font.PLAIN, 14));
-                g.setColor(Color.BLACK);
-                g.drawString("wlsos", 310, 45);
-                g.dispose();
+                    //Append that additional info
+                    BufferedImage image = null;
+                    image = ImageIO.read(new File(path));
+                    Graphics2D g = (Graphics2D) image.getGraphics();
+                    g.setFont(new Font("default", Font.PLAIN, 12));
+                    g.setColor(Color.BLACK);
+                    g.drawString("WSOS", 300, 45);
+                    g.dispose();
 
-                ImageIO.write(image, "png", new File("C:\\Users\\Spongebob\\Desktop\\barcode-code128.jpg"));
-                System.exit(0);
+                    ImageIO.write(image, "jpg", new File(path));
+                }
+                System.exit(0);                                             // Replace this by jf.dispose();
             }
         else {
             jf.dispose();
@@ -434,6 +452,23 @@ public class MainFrame extends javax.swing.JFrame {
         lheader.setText(str);
     }//GEN-LAST:event_tfNumFocusLost
 
+    /*private void manipulatePdf(String dest) throws Exception {
+        Image image = new Image(ImageDataFactory.create(IMAGES[0]));
+        PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
+        Document doc = new Document(pdfDoc, new PageSize(image.getImageWidth(), image.getImageHeight()));
+        
+        for (int i = 0; i < IMAGES.length; i++) {
+            image = new Image(ImageDataFactory.create(IMAGES[i]));
+            image.setWidthPercent(80);
+            int w = (int)image.getImageWidth()*20/100;
+            pdfDoc.addNewPage(new PageSize(image.getImageWidth()-w, image.getImageHeight()));
+            // Notice that now it is not necessary to set image position,
+            // because images are not overlapped while adding.
+            image.setFixedPosition(i + 1, 0, 0);
+            doc.add(image);
+        }
+        doc.close();
+    }*/
     
     private void createTable()                                                  // Table + Database = Tab2
     {
