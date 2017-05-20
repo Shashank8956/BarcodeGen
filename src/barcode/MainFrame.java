@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import com.mysql.jdbc.*;
 import org.jdesktop.xswingx.PromptSupport;
 
 public class MainFrame extends javax.swing.JFrame {
@@ -43,7 +44,14 @@ public class MainFrame extends javax.swing.JFrame {
         btn = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         tfOfset = new javax.swing.JFormattedTextField();
+        jPanel6 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        tfTab2Model = new javax.swing.JTextField();
+        tfTab2Corres = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
+        jPanel8 = new javax.swing.JPanel();
+        btnAdd = new javax.swing.JButton();
+        jPanel9 = new javax.swing.JPanel();
 
         jFormattedTextField1.setText("jFormattedTextField1");
 
@@ -167,7 +175,82 @@ public class MainFrame extends javax.swing.JFrame {
         );
 
         tab.addTab("", new javax.swing.ImageIcon(getClass().getResource("/barcode/Home.png")), jPanel2, ""); // NOI18N
-        tab.addTab("", new javax.swing.ImageIcon(getClass().getResource("/barcode/Stack.png")), jScrollPane1); // NOI18N
+
+        jPanel7.setLayout(new java.awt.GridBagLayout());
+
+        tfTab2Model.setMinimumSize(new java.awt.Dimension(30, 26));
+        tfTab2Model.setPreferredSize(new java.awt.Dimension(30, 26));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 59;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(21, 36, 6, 37);
+        jPanel7.add(tfTab2Model, gridBagConstraints);
+
+        tfTab2Corres.setMinimumSize(new java.awt.Dimension(30, 26));
+        tfTab2Corres.setPreferredSize(new java.awt.Dimension(30, 26));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 59;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(21, 38, 6, 40);
+        jPanel7.add(tfTab2Corres, gridBagConstraints);
+
+        jPanel8.setLayout(new java.awt.GridBagLayout());
+
+        btnAdd.setText("Add Entry");
+        btnAdd.setMaximumSize(new java.awt.Dimension(84, 29));
+        btnAdd.setMinimumSize(new java.awt.Dimension(84, 29));
+        btnAdd.setName(""); // NOI18N
+        btnAdd.setPreferredSize(new java.awt.Dimension(84, 29));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(4, 125, 9, 123);
+        jPanel8.add(btnAdd, gridBagConstraints);
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 136, Short.MAX_VALUE)
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE))
+        );
+
+        tab.addTab("tab2", jPanel6);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -194,34 +277,39 @@ public class MainFrame extends javax.swing.JFrame {
         barcode.setBarcodeWidth(350f);
         barcode.setBarcodeHeight(50f);
         try {
-            // Generate barcode & encode into JPG format
-            barcode.drawBarcode("C:\\Users\\Spongebob\\Desktop\\barcode-code128.jpg");
-
-            //Append that additional info
-            BufferedImage image = null;
-            image = ImageIO.read(new File("C:\\Users\\Spongebob\\Desktop\\barcode-code128.jpg"));
-            Graphics2D g = (Graphics2D) image.getGraphics();
-            g.setFont(new Font("default", Font.PLAIN, 14));
-            g.setColor(Color.BLACK);
-            g.drawString("wlsos", 310, 45);
-            g.dispose();
-
-            ImageIO.write(image, "png", new File("C:\\Users\\Spongebob\\Desktop\\barcode-code128.jpg"));
-        } catch (Exception ex) {}
-        
-        int input = JOptionPane.showConfirmDialog(jf
+            int input = JOptionPane.showConfirmDialog(jf
                , "Print for " + str + "?"
                ,"Confirm print"
                ,JOptionPane.YES_NO_OPTION);
         
-        if(input == JOptionPane.YES_NO_OPTION)
-            System.exit(0);
+        if(input == JOptionPane.YES_OPTION)
+            {
+                // Generate barcode & encode into JPG format
+                barcode.drawBarcode("C:\\Users\\Spongebob\\Desktop\\barcode-code128.jpg");
+
+                //Append that additional info
+                BufferedImage image = null;
+                image = ImageIO.read(new File("C:\\Users\\Spongebob\\Desktop\\barcode-code128.jpg"));
+                Graphics2D g = (Graphics2D) image.getGraphics();
+                g.setFont(new Font("default", Font.PLAIN, 14));
+                g.setColor(Color.BLACK);
+                g.drawString("wlsos", 310, 45);
+                g.dispose();
+
+                ImageIO.write(image, "png", new File("C:\\Users\\Spongebob\\Desktop\\barcode-code128.jpg"));
+                System.exit(0);
+            }
+        else {
+            jf.dispose();
+        }
+        } catch (Exception ex) {}
         
     }//GEN-LAST:event_btnActionPerformed
 
     private void tfModelFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfModelFocusLost
         str2 = tfModel.getText();
         str = str1 + str2;
+        str = str.toUpperCase();
         lheader.setText(str);
     }//GEN-LAST:event_tfModelFocusLost
 
@@ -231,7 +319,8 @@ public class MainFrame extends javax.swing.JFrame {
         if(str1!=null)
         {
             str = str1;
-            lheader.setText(str1);
+            str = str.toUpperCase();
+            lheader.setText(str);
         }
         else
         {
@@ -242,6 +331,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void tfNumFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfNumFocusLost
         str3 = tfNum.getText();
         str = str1 + str2 + str3;
+        str = str.toUpperCase();
         lheader.setText(str);
     }//GEN-LAST:event_tfNumFocusLost
 
@@ -290,18 +380,25 @@ public class MainFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn;
+    private javax.swing.JButton btnAdd;
     private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lheader;
     private javax.swing.JTabbedPane tab;
     private javax.swing.JTextField tfModel;
     private javax.swing.JTextField tfNum;
     private javax.swing.JFormattedTextField tfOfset;
+    private javax.swing.JTextField tfTab2Corres;
+    private javax.swing.JTextField tfTab2Model;
     private javax.swing.JTextField tfYear;
     // End of variables declaration//GEN-END:variables
 
