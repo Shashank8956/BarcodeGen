@@ -464,10 +464,10 @@ public class MainFrame extends javax.swing.JFrame {
             image = new Image(ImageDataFactory.create(IMAGES[i]));
             //image.setWidthPercent(80);
             pdfDoc.addNewPage(new PageSize(image.getImageWidth(), image.getImageHeight()));
-            // Notice that now it is not necessary to set image position,
-            // because images are not overlapped while adding.
-            image.setFixedPosition(i + 1, 0, 0);
-            doc.add(image);
+            image.setFixedPosition(i + 1, 0, 0);                                // No need to set image position
+            doc.add(image);                                                     //since each image is in new page
+            File file = new File(IMAGES[i]);
+            file.delete();
         }
         doc.close();
     }
