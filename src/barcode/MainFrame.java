@@ -34,7 +34,7 @@ public class MainFrame extends javax.swing.JFrame {
     String user = "root";
     String pass = "root";
     String[] columnNames = {"No", "Model", "Info"};
-    int count=1, make=0;
+    int count=1, make=-1;
     String[] IMAGES;
     public MainFrame() {
         initComponents();
@@ -367,50 +367,56 @@ public class MainFrame extends javax.swing.JFrame {
     private void btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionPerformed
         JFrame jf = new JFrame();
         String code, path;
+        if(str1!=null && str2!=null && str3!=null && make!=-1)
+        {
+            try {
+                int input = JOptionPane.showConfirmDialog(jf
+                    , "Print for " + str + "?"
+                    ,"Confirm print"
+                    ,JOptionPane.YES_NO_OPTION);
         
-        try {
-            int input = JOptionPane.showConfirmDialog(jf
-               , "Print for " + str + "?"
-               ,"Confirm print"
-               ,JOptionPane.YES_NO_OPTION);
-        
-        if(input == JOptionPane.YES_OPTION)
-            {
-                IMAGES = new String[count];
-                for(int i=0; i<count; i++)
-                {   
-                    System.out.println(make);
-                    code = str1 + str2 + (make+i);
-                    path = "C:\\Users\\Spongebob\\Desktop\\" + code + ".jpg";
-                    IMAGES[i] = path;
-                    System.out.println("hi");
-                    Code128 barcode = new Code128();                            //Barcode Type
-                    barcode.setData(code);                                      //Barcode String
-                    barcode.setX(2);                                            //Barcode data text to encode
-                    barcode.setBarcodeWidth(350f);
-                    barcode.setBarcodeHeight(50f);
+            if(input == JOptionPane.YES_OPTION)
+                {
+                    IMAGES = new String[count];
+                    for(int i=0; i<count; i++)
+                    {   
+                        System.out.println(make);
+                        code = str1 + str2 + (make+i);
+                        path = "C:\\Users\\Spongebob\\Desktop\\" + code + ".jpg";
+                        IMAGES[i] = path;
+                        System.out.println("hi");
+                        Code128 barcode = new Code128();                            //Barcode Type
+                        barcode.setData(code);                                      //Barcode String
+                        barcode.setX(2);                                            //Barcode data text to encode
+                        barcode.setBarcodeWidth(350f);
+                        barcode.setBarcodeHeight(50f);
                     
-                    // Generate barcode & encode into JPG format
-                    barcode.drawBarcode(path);
+                        // Generate barcode & encode into JPG format
+                        barcode.drawBarcode(path);
 
-                    //Append that additional info
-                    BufferedImage image = null;
-                    image = ImageIO.read(new File(path));
-                    Graphics2D g = (Graphics2D) image.getGraphics();
-                    g.setFont(new Font("default", Font.PLAIN, 12));
-                    g.setColor(Color.BLACK);
-                    g.drawString("WSOS", 300, 45);
-                    g.dispose();
+                        //Append that additional info
+                        BufferedImage image = null;
+                        image = ImageIO.read(new File(path));
+                        Graphics2D g = (Graphics2D) image.getGraphics();
+                        g.setFont(new Font("default", Font.PLAIN, 12));
+                        g.setColor(Color.BLACK);
+                        g.drawString("WSOS", 300, 45);
+                        g.dispose();
 
-                    ImageIO.write(image, "jpg", new File(path));
-                }
-                manipulatePdf("C:\\Users\\Spongebob\\Desktop\\BarcodePDF.pdf");
-                System.exit(0);                                             // Replace this by jf.dispose();
+                        ImageIO.write(image, "jpg", new File(path));
+                    }
+                    manipulatePdf("C:\\Users\\Spongebob\\Desktop\\BarcodePDF.pdf");
+                    System.exit(0);                                             // Replace this by jf.dispose();
+                    }
+            else {
+                jf.dispose();
             }
-        else {
-            jf.dispose();
+            } catch (Exception ex) {} 
         }
-        } catch (Exception ex) {}
+        else
+        {
+            JOptionPane.showMessageDialog(jf, "Fill all details!"); 
+        }
         
     }//GEN-LAST:event_btnActionPerformed
 
