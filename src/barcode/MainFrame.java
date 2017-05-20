@@ -14,6 +14,7 @@ import javax.swing.*;
 import java.sql.*;
 //import com.mysql.jdbc.*;
 import java.sql.DriverManager;
+import java.text.NumberFormat;
 import org.jdesktop.xswingx.PromptSupport;
 
 public class MainFrame extends javax.swing.JFrame {
@@ -24,7 +25,7 @@ public class MainFrame extends javax.swing.JFrame {
     String user = "root";
     String pass = "root";
     String[] columnNames = {"No", "Model", "Info"};
-    int count=0;
+    int count=1, make=0;
     
     public MainFrame() {
         initComponents();
@@ -98,6 +99,11 @@ public class MainFrame extends javax.swing.JFrame {
         tfOfset.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         tfOfset.setMinimumSize(new java.awt.Dimension(28, 26));
         tfOfset.setPreferredSize(new java.awt.Dimension(28, 26));
+        tfOfset.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfOfsetFocusLost(evt);
+            }
+        });
         tfOfset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfOfsetActionPerformed(evt);
@@ -113,6 +119,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         tfInfo.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         tfInfo.setText("Information");
+        tfInfo.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tfInfo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         tfInfo.setMinimumSize(new java.awt.Dimension(85, 26));
         tfInfo.setPreferredSize(new java.awt.Dimension(85, 26));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -125,6 +133,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         tfYear.setMinimumSize(new java.awt.Dimension(30, 27));
         tfYear.setPreferredSize(new java.awt.Dimension(30, 27));
+        tfYear.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfYearFocusLost(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -135,6 +148,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         tfModel.setMinimumSize(new java.awt.Dimension(30, 27));
         tfModel.setPreferredSize(new java.awt.Dimension(30, 27));
+        tfModel.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfModelFocusLost(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -146,6 +164,11 @@ public class MainFrame extends javax.swing.JFrame {
         tfNum.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
         tfNum.setMinimumSize(new java.awt.Dimension(14, 23));
         tfNum.setPreferredSize(new java.awt.Dimension(14, 23));
+        tfNum.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfNumFocusLost(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -334,6 +357,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionPerformed
         JFrame jf = new JFrame();
+        //System.out.println(count+" "+make);
         Code128 barcode = new Code128();     //Barcode Type
         barcode.setData(str);                //Barcode String
         barcode.setX(2);                     //Barcode data text to encode
@@ -370,7 +394,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnActionPerformed
 
     private void tfOfsetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfOfsetActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_tfOfsetActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
@@ -381,7 +405,37 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void createTable()
+    private void tfOfsetFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfOfsetFocusLost
+        String Ofset = tfOfset.getText();
+        count = Integer.parseInt(Ofset);
+        System.out.println(count);
+        
+    }//GEN-LAST:event_tfOfsetFocusLost
+
+    private void tfYearFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfYearFocusLost
+        str1 = tfYear.getText();
+        str1 = str1.toUpperCase();
+        str = str1;
+        lheader.setText(str);
+    }//GEN-LAST:event_tfYearFocusLost
+
+    private void tfModelFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfModelFocusLost
+        str2 = tfModel.getText();
+        str2 = str2.toUpperCase();
+        str = str1 + str2;
+        lheader.setText(str);
+        tfInfo.setText("wsos");
+    }//GEN-LAST:event_tfModelFocusLost
+
+    private void tfNumFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfNumFocusLost
+        str3 = tfNum.getText();
+        make = Integer.parseInt(str3);
+        str = str1 + str2 + str3;
+        lheader.setText(str);
+    }//GEN-LAST:event_tfNumFocusLost
+
+    
+    private void createTable()                                                  // Table + Database = Tab2
     {
         try 
         {
