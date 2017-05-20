@@ -46,15 +46,15 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         lheader = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
-        tfYear = new javax.swing.JTextField();
-        tfModel = new javax.swing.JTextField();
-        tfNum = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         btn = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         tfOfset = new javax.swing.JFormattedTextField();
         tfInfo = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        tfYear = new javax.swing.JTextField();
+        tfModel = new javax.swing.JTextField();
+        tfNum = new javax.swing.JFormattedTextField();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         tfTab2Model = new javax.swing.JTextField();
@@ -82,58 +82,6 @@ public class MainFrame extends javax.swing.JFrame {
         lheader.setText("BARCODE");
         jPanel3.add(lheader, new java.awt.GridBagConstraints());
 
-        jPanel4.setLayout(new java.awt.GridBagLayout());
-
-        tfYear.setMinimumSize(new java.awt.Dimension(30, 28));
-        tfYear.setPreferredSize(new java.awt.Dimension(30, 28));
-        tfYear.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                tfYearFocusLost(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 59;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(43, 28, 39, 23);
-        jPanel4.add(tfYear, gridBagConstraints);
-
-        tfModel.setMinimumSize(new java.awt.Dimension(30, 28));
-        tfModel.setPreferredSize(new java.awt.Dimension(30, 28));
-        tfModel.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                tfModelFocusLost(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 59;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(43, 26, 39, 24);
-        jPanel4.add(tfModel, gridBagConstraints);
-
-        tfNum.setMinimumSize(new java.awt.Dimension(30, 28));
-        tfNum.setPreferredSize(new java.awt.Dimension(30, 28));
-        tfNum.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                tfNumFocusLost(evt);
-            }
-        });
-        tfNum.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfNumActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 59;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(43, 26, 39, 24);
-        jPanel4.add(tfNum, gridBagConstraints);
-
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
         btn.setText("Print");
@@ -148,8 +96,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         tfOfset.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
         tfOfset.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        tfOfset.setMinimumSize(new java.awt.Dimension(23, 26));
-        tfOfset.setPreferredSize(new java.awt.Dimension(23, 26));
+        tfOfset.setMinimumSize(new java.awt.Dimension(28, 26));
+        tfOfset.setPreferredSize(new java.awt.Dimension(28, 26));
         tfOfset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfOfsetActionPerformed(evt);
@@ -160,38 +108,74 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 68;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(16, 35, 20, 7);
+        gridBagConstraints.insets = new java.awt.Insets(16, 55, 20, 7);
         jPanel1.add(tfOfset, gridBagConstraints);
 
-        tfInfo.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        tfInfo.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         tfInfo.setText("Information");
         tfInfo.setMinimumSize(new java.awt.Dimension(85, 26));
         tfInfo.setPreferredSize(new java.awt.Dimension(85, 26));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 154, 0, 14);
+        gridBagConstraints.insets = new java.awt.Insets(0, 184, 0, 0);
         jPanel1.add(tfInfo, gridBagConstraints);
+
+        jPanel4.setLayout(new java.awt.GridBagLayout());
+
+        tfYear.setMinimumSize(new java.awt.Dimension(30, 27));
+        tfYear.setPreferredSize(new java.awt.Dimension(30, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 59;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(25, 37, 27, 26);
+        jPanel4.add(tfYear, gridBagConstraints);
+
+        tfModel.setMinimumSize(new java.awt.Dimension(30, 27));
+        tfModel.setPreferredSize(new java.awt.Dimension(30, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 59;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(25, 36, 27, 26);
+        jPanel4.add(tfModel, gridBagConstraints);
+
+        tfNum.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
+        tfNum.setMinimumSize(new java.awt.Dimension(14, 23));
+        tfNum.setPreferredSize(new java.awt.Dimension(14, 23));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 83;
+        gridBagConstraints.ipady = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(25, 31, 27, 23);
+        jPanel4.add(tfNum, gridBagConstraints);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())))
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -385,39 +369,6 @@ public class MainFrame extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnActionPerformed
 
-    private void tfModelFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfModelFocusLost
-        str2 = tfModel.getText();
-        str = str1 + str2;
-        str = str.toUpperCase();
-        lheader.setText(str);
-    }//GEN-LAST:event_tfModelFocusLost
-
-    private void tfYearFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfYearFocusLost
-
-        str1 = tfYear.getText();
-        if(str1!=null)
-        {
-            str = str1;
-            str = str.toUpperCase();
-            lheader.setText(str);
-        }
-        else
-        {
-            lheader.setText("BARCODE");
-        }
-    }//GEN-LAST:event_tfYearFocusLost
-
-    private void tfNumFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfNumFocusLost
-        str3 = tfNum.getText();
-        str = str1 + str2 + str3;
-        str = str.toUpperCase();
-        lheader.setText(str);
-    }//GEN-LAST:event_tfNumFocusLost
-
-    private void tfNumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNumActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tfNumActionPerformed
-
     private void tfOfsetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfOfsetActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tfOfsetActionPerformed
@@ -499,7 +450,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTable table1;
     private javax.swing.JLabel tfInfo;
     private javax.swing.JTextField tfModel;
-    private javax.swing.JTextField tfNum;
+    private javax.swing.JFormattedTextField tfNum;
     private javax.swing.JFormattedTextField tfOfset;
     private javax.swing.JTextField tfTab2Corres;
     private javax.swing.JTextField tfTab2Model;
