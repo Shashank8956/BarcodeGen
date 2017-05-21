@@ -424,11 +424,10 @@ public class MainFrame extends javax.swing.JFrame {
                     IMAGES = new String[count];
                     for(int i=0; i<count; i++)
                     {   
-                        System.out.println(make);
                         code = str1 + str2 + (make+i);
                         path = "C:\\Users\\Spongebob\\Desktop\\" + code + ".jpg";
                         IMAGES[i] = path;
-                        System.out.println("hi");
+    
                         Code128 barcode = new Code128();                            //Barcode Type
                         barcode.setData(code);                                      //Barcode String
                         barcode.setX(2);                                            //Barcode data text to encode
@@ -444,13 +443,13 @@ public class MainFrame extends javax.swing.JFrame {
                         Graphics2D g = (Graphics2D) image.getGraphics();
                         g.setFont(new Font("default", Font.PLAIN, 12));
                         g.setColor(Color.BLACK);
-                        g.drawString("WSOS", 300, 45);
+                        g.drawString(info, 300, 45);
                         g.dispose();
 
                         ImageIO.write(image, "jpg", new File(path));
                     }
                     manipulatePdf("C:\\Users\\Spongebob\\Desktop\\BarcodePDF.pdf");
-                    System.exit(0);                                             // Replace this by jf.dispose();
+                    jf.dispose();                                             // Replace this by jf.dispose();
                     }
             else {
                 jf.dispose();
@@ -554,18 +553,21 @@ public class MainFrame extends javax.swing.JFrame {
             Connection con = DriverManager.getConnection(url, user, pass);
             query = "SELECT Info from Model where Model ='" 
                     + str2 + "'";
-            System.out.println(query);
+            //System.out.println(query);
             ps = con.prepareStatement(query);
             rs = ps.executeQuery();
-            str2 = rs.getString("Info");
-            System.out.println(str2);
+            if(rs.next())
+                info = rs.getString("Info");
+            
             createTable();
             
         } catch(Exception err)
         {
             JOptionPane.showMessageDialog(null, err.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }finally
+        {
+            tfInfo.setText(info);
         }
-        //tfInfo.setText(ps);
     }//GEN-LAST:event_tfModelFocusLost
 
     private void tfNumFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfNumFocusLost
@@ -638,8 +640,8 @@ public class MainFrame extends javax.swing.JFrame {
             Class.forName(driverName); 
             Connection con = DriverManager.getConnection(url, user, pass);
             String sql = "select * from Model";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
             int i =0;
             while(rs.next()==true)
             {
