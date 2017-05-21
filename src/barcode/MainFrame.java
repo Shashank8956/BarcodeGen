@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.table.*;
 import java.sql.*;
 import java.sql.*;
 import java.sql.DriverManager;
@@ -44,6 +45,7 @@ public class MainFrame extends javax.swing.JFrame {
     
     public MainFrame() {
         initComponents();
+        createTable();
         PromptSupport.setPrompt("Month/Year", tfYear);
         PromptSupport.setPrompt("Model", tfModel);
         PromptSupport.setPrompt("Make no", tfNum);
@@ -81,7 +83,7 @@ public class MainFrame extends javax.swing.JFrame {
         btnAdd = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        ClearAllBtn = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
         jFormattedTextField1.setText("jFormattedTextField1");
@@ -269,9 +271,16 @@ public class MainFrame extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         table1.setColumnSelectionAllowed(true);
@@ -309,10 +318,10 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(7, 26, 6, 20);
         jPanel9.add(jButton1, gridBagConstraints);
 
-        jButton2.setText("Clear All");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        ClearAllBtn.setText("Clear All");
+        ClearAllBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                ClearAllBtnActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -321,7 +330,7 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 42;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 26, 5, 20);
-        jPanel9.add(jButton2, gridBagConstraints);
+        jPanel9.add(ClearAllBtn, gridBagConstraints);
 
         jButton3.setText("Edit");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -443,18 +452,63 @@ public class MainFrame extends javax.swing.JFrame {
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         if(model!=null && info!=null)
         {
-            createTable();
-            System.out.println(model + " " + info);
+            try 
+            {
+                Class.forName(driverName);
+                Connection con = DriverManager.getConnection(url, user, pass);
+                query = "INSERT into Model (Model, Info) VALUES ('" 
+                        + model + "','" + info + "');"; 
+                ps = con.prepareStatement(query);
+                ps.execute();
+                JOptionPane.showMessageDialog(null, "Entry Added!", "Successful!", JOptionPane.INFORMATION_MESSAGE);
+            
+            } catch(Exception err)
+            {
+                JOptionPane.showMessageDialog(null, err.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } finally
+            {
+                System.out.println(model + " " + info);
+                createTable();
+            }
         }
-        else if(model==null || info==null)
-        {
-            JOptionPane.showMessageDialog(jf, "Fill all details!");
-        }
+            else if(model==null || info==null)
+            {
+                JOptionPane.showMessageDialog(jf, "Fill all details!");
+            }
     }//GEN-LAST:event_btnAddActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void ClearAllBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearAllBtnActionPerformed
+        try 
+        {
+            Class.forName(driverName);
+            Connection con = DriverManager.getConnection(url, user, pass);
+            query = "DROP TABLE Model;";
+            ps = con.prepareStatement(query);
+            ps.execute();
+            
+        } catch(Exception err)
+        {
+            JOptionPane.showMessageDialog(null, err.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } finally
+        {
+            try 
+            {
+                Class.forName(driverName);
+                Connection con = DriverManager.getConnection(url, user, pass);
+                query = "CREATE TABLE Model ("
+                        +"id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+                        +"Model varchar(3) UNIQUE,"
+                        +"Info varchar(5));";
+                ps = con.prepareStatement(query);
+                ps.execute();
+                JOptionPane.showMessageDialog(null, "All data cleared!", "Clear All!", JOptionPane.INFORMATION_MESSAGE);
+                
+            } catch(Exception err)
+            {
+                JOptionPane.showMessageDialog(null, err.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_ClearAllBtnActionPerformed
 
     private void tfOfsetFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfOfsetFocusLost
         String Ofset = tfOfset.getText();
@@ -512,19 +566,52 @@ public class MainFrame extends javax.swing.JFrame {
     
     private void createTable()                                                  // Table + Database = Tab2
     {
-        try 
+        String no, mod, info;
+        DefaultTableModel tablemod = new DefaultTableModel();
+        tablemod.setColumnIdentifiers(columnNames);
+        table1.setModel(tablemod);
+        table1.setRowSelectionAllowed(true);
+        table1.setColumnSelectionAllowed(false);
+        int row = table1.getSelectedRow();
+        if ((row > -1)) 
         {
-            Class.forName(driverName);
+           table1.setRowSelectionInterval(row, row);
+        }
+        try
+        { 
+            Class.forName(driverName); 
             Connection con = DriverManager.getConnection(url, user, pass);
-            query = "INSERT into Model (Model, Info) VALUES ('" 
-                    + model + "','" + info + "');"; 
-            ps = con.prepareStatement(query);
-            ps.execute();
-            JOptionPane.showMessageDialog(null, "Entry Added!", "Successful!", JOptionPane.INFORMATION_MESSAGE);
-            
-        } catch(Exception err)
+            String sql = "select * from Model";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            int i =0;
+            while(rs.next()==true)
+            {
+                
+                no = rs.getString("id");
+                mod = rs.getString("model");
+                info = rs.getString("info");
+                tablemod.addRow(new Object[]{no, mod, info});
+                i++; 
+            }
+            if(i <1)
+            {
+                JOptionPane.showMessageDialog(null, "No Record Found","Error",
+                JOptionPane.ERROR_MESSAGE);
+            }
+            if(i==1)
+            {
+                System.out.println(i+" Record Found");
+            }
+            else
+            {
+                System.out.println(i+" Records Found");
+            }
+        }
+        catch(Exception ex)
         {
-            JOptionPane.showMessageDialog(null, err.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(),"Error",
+            JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -564,10 +651,10 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ClearAllBtn;
     private javax.swing.JButton btn;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JPanel jPanel1;
