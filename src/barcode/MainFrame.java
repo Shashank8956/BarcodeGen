@@ -26,6 +26,9 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Calendar;
 
 public class MainFrame extends javax.swing.JFrame {
 
@@ -38,6 +41,7 @@ public class MainFrame extends javax.swing.JFrame {
     PreparedStatement ps = null;
     ResultSet rs = null;
     String[] columnNames = {"No", "Model", "Info"};
+    String[] columnNames2 = {"No", "Barcode", "Time", "Date"};
     int count=1, make=-1;
     String[] IMAGES;
     JFrame jf = new JFrame();
@@ -84,8 +88,13 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel9 = new javax.swing.JPanel();
         deleteBtn = new javax.swing.JButton();
         ClearAllBtn = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        editBtn = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
+        jPanel11 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TableCode = new javax.swing.JTable();
+        jPanel12 = new javax.swing.JPanel();
+        pathFinder = new javax.swing.JButton();
 
         jFormattedTextField1.setText("jFormattedTextField1");
 
@@ -135,7 +144,7 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(16, 55, 20, 7);
         jPanel1.add(tfOfset, gridBagConstraints);
 
-        tfInfo.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        tfInfo.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         tfInfo.setText("Information");
         tfInfo.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         tfInfo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -338,14 +347,19 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(6, 26, 5, 20);
         jPanel9.add(ClearAllBtn, gridBagConstraints);
 
-        jButton3.setText("Edit");
+        editBtn.setText("Edit");
+        editBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editBtnActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.ipadx = 68;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 26, 4, 20);
-        jPanel9.add(jButton3, gridBagConstraints);
+        jPanel9.add(editBtn, gridBagConstraints);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -378,18 +392,81 @@ public class MainFrame extends javax.swing.JFrame {
 
         tab.addTab("", new javax.swing.ImageIcon(getClass().getResource("/barcode/stack2.png")), jPanel6, "Model Matrix"); // NOI18N
 
+        TableCode.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "No.", "Barcode", "Time", "Date"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        TableCode.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(TableCode);
+
+        jPanel12.setLayout(new java.awt.GridBagLayout());
+
+        pathFinder.setText("Set Path");
+        pathFinder.setMaximumSize(new java.awt.Dimension(100, 32));
+        pathFinder.setMinimumSize(new java.awt.Dimension(100, 32));
+        pathFinder.setPreferredSize(new java.awt.Dimension(100, 32));
+        pathFinder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pathFinderActionPerformed(evt);
+            }
+        });
+        jPanel12.add(pathFinder, new java.awt.GridBagConstraints());
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(27, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 492, Short.MAX_VALUE)
+            .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 341, Short.MAX_VALUE)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        tab.addTab("tab3", jPanel10);
+        tab.addTab("", new javax.swing.ImageIcon(getClass().getResource("/barcode/rec2.png")), jPanel10); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -447,12 +524,37 @@ public class MainFrame extends javax.swing.JFrame {
                         g.dispose();
 
                         ImageIO.write(image, "jpg", new File(path));
+                        
+                        int hour, min, day, month, year;
+                        java.util.Date date = new java.util.Date();
+                        Calendar cal= Calendar.getInstance();
+                        year = cal.get(Calendar.YEAR);
+                        month = cal.get(Calendar.MONTH);      // 0 to 11
+                        day = cal.get(Calendar.DAY_OF_MONTH);
+                        hour = cal.get(Calendar.HOUR_OF_DAY);
+                        min = cal.get(Calendar.MINUTE);
+        
+                        try {
+                            Class.forName(driverName); 
+                            Connection con = DriverManager.getConnection(url, user, pass);
+                            query = "INSERT into barcode (BARCODE, TIME, DATE) VALUES ('" 
+                                + code + "','" + hour + ":" + min + "','" 
+                                + day + "/" + month + "/" + year+ "');"; 
+                            ps = con.prepareStatement(query);
+                            ps.execute();
+                        
+                        }catch(Exception e)
+                        {
+                            System.out.println(e);
+                        }
                     }
                     manipulatePdf("C:\\Users\\Spongebob\\Desktop\\BarcodePDF.pdf");
                     jf.dispose();                                             // Replace this by jf.dispose();
+                    createTable2();
                     }
             else {
                 jf.dispose();
+                createTable2();
             }
             } catch (Exception ex) {} 
         }
@@ -474,6 +576,8 @@ public class MainFrame extends javax.swing.JFrame {
             {
                 Class.forName(driverName);
                 Connection con = DriverManager.getConnection(url, user, pass);
+                model=model.toUpperCase();
+                info=info.toUpperCase();
                 query = "INSERT into Model (Model, Info) VALUES ('" 
                         + model + "','" + info + "');"; 
                 ps = con.prepareStatement(query);
@@ -524,6 +628,9 @@ public class MainFrame extends javax.swing.JFrame {
             } catch(Exception err)
             {
                 JOptionPane.showMessageDialog(null, err.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }finally
+            {
+                createTable();
             }
         }
     }//GEN-LAST:event_ClearAllBtnActionPerformed
@@ -609,6 +716,55 @@ public class MainFrame extends javax.swing.JFrame {
             createTable();
     }//GEN-LAST:event_deleteBtnActionPerformed
 
+    private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
+        int row = table1.getSelectedRow();
+        String idSel = (String)table1.getValueAt(row, 0);
+        if(idSel!=null)
+        {
+        //System.out.print(idSel);
+        try 
+        {
+            Class.forName(driverName);
+            Connection con = DriverManager.getConnection(url, user, pass);
+            query = "UPDATE Model Model = '" +null+ "', Info = '" +null+ "' where id = "  + idSel + ";";
+            ps = con.prepareStatement(query);
+            ps.execute();
+            createTable();
+            
+        } catch(Exception err)
+        {
+            JOptionPane.showMessageDialog(null, err.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        }
+        else
+            createTable();
+    }//GEN-LAST:event_editBtnActionPerformed
+
+    private void pathFinderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pathFinderActionPerformed
+        JFileChooser fc = new JFileChooser();
+        fc.setCurrentDirectory(new java.io.File("."));
+        fc.setDialogTitle("choosertitle");
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fc.setAcceptAllFileFilterUsed(false);
+        jf.add(fc);
+        jf.setSize(600, 400);
+        jf.setVisible(true);
+        
+        fc.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            File file = fc.getCurrentDirectory();
+            try {
+                String fullpath = file.getCanonicalPath(); // or getAbsolutePath()
+                System.out.println(fullpath);
+            } catch (IOException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            }
+     
+        });         
+    }//GEN-LAST:event_pathFinderActionPerformed
+
     private void manipulatePdf(String dest) throws Exception {
         Image image = new Image(ImageDataFactory.create(IMAGES[0]));
         PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
@@ -626,7 +782,55 @@ public class MainFrame extends javax.swing.JFrame {
         doc.close();
     }
     
-    private void createTable()                                                  // Table + Database = Tab2
+    private void createTable2()                                                  // Table + Database = Tab2
+    {
+        String bar, time, date, id;
+        DefaultTableModel tablemod = new DefaultTableModel();
+        tablemod.setColumnIdentifiers(columnNames2);
+        TableCode.setModel(tablemod);
+        TableCode.setRowSelectionAllowed(true);
+        TableCode.setColumnSelectionAllowed(false);
+
+        try
+        { 
+            Class.forName(driverName); 
+            Connection con = DriverManager.getConnection(url, user, pass);
+            String sql = "select * from Barcode";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            int i =0;
+            while(rs.next()==true)
+            {
+                id = rs.getString("id");
+                bar = rs.getString("barcode");
+                time = rs.getString("time");
+                date = rs.getString("date");
+                tablemod.addRow(new Object[]{id, bar, time, date});
+                i++; 
+            }
+            if(i <1)
+            {
+                JOptionPane.showMessageDialog(null, "No Record Found","Error",
+                JOptionPane.ERROR_MESSAGE);
+            }
+            if(i==1)
+            {
+                System.out.println(i+" Record Found");
+            }
+            else
+            {
+                System.out.println(i+" Records Found");
+            }
+        }
+        catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, ex.getMessage(),"Error",
+            JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    
+    private void createTable()
     {
         String no, mod, info;
         DefaultTableModel tablemod = new DefaultTableModel();
@@ -671,7 +875,7 @@ public class MainFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, ex.getMessage(),"Error",
             JOptionPane.ERROR_MESSAGE);
         }
-    }
+}
     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -710,13 +914,16 @@ public class MainFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ClearAllBtn;
+    private javax.swing.JTable TableCode;
     private javax.swing.JButton btn;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton deleteBtn;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton editBtn;
     private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -726,7 +933,9 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lheader;
+    private javax.swing.JButton pathFinder;
     private javax.swing.JTabbedPane tab;
     private javax.swing.JTable table1;
     private javax.swing.JLabel tfInfo;
