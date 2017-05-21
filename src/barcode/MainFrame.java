@@ -82,9 +82,10 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel8 = new javax.swing.JPanel();
         btnAdd = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        deleteBtn = new javax.swing.JButton();
         ClearAllBtn = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jPanel10 = new javax.swing.JPanel();
 
         jFormattedTextField1.setText("jFormattedTextField1");
 
@@ -310,13 +311,18 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel9.setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setText("Delete Selected");
+        deleteBtn.setText("Delete Selected");
+        deleteBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteBtnActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 26, 6, 20);
-        jPanel9.add(jButton1, gridBagConstraints);
+        jPanel9.add(deleteBtn, gridBagConstraints);
 
         ClearAllBtn.setText("Clear All");
         ClearAllBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -371,6 +377,19 @@ public class MainFrame extends javax.swing.JFrame {
         );
 
         tab.addTab("", new javax.swing.ImageIcon(getClass().getResource("/barcode/stack2.png")), jPanel6, "Model Matrix"); // NOI18N
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 492, Short.MAX_VALUE)
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 341, Short.MAX_VALUE)
+        );
+
+        tab.addTab("tab3", jPanel10);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -529,7 +548,24 @@ public class MainFrame extends javax.swing.JFrame {
         str2 = str2.toUpperCase();
         str = str1 + str2;
         lheader.setText(str);
-        tfInfo.setText("wsos");
+        try 
+        {
+            Class.forName(driverName);
+            Connection con = DriverManager.getConnection(url, user, pass);
+            query = "SELECT Info from Model where Model ='" 
+                    + str2 + "'";
+            System.out.println(query);
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
+            str2 = rs.getString("Info");
+            System.out.println(str2);
+            createTable();
+            
+        } catch(Exception err)
+        {
+            JOptionPane.showMessageDialog(null, err.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        //tfInfo.setText(ps);
     }//GEN-LAST:event_tfModelFocusLost
 
     private void tfNumFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfNumFocusLost
@@ -546,6 +582,30 @@ public class MainFrame extends javax.swing.JFrame {
     private void tfTab2CorresFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfTab2CorresFocusLost
         info = tfTab2Corres.getText();
     }//GEN-LAST:event_tfTab2CorresFocusLost
+
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        int row = table1.getSelectedRow();
+        String idSel = (String)table1.getValueAt(row, 0);
+        if(idSel!=null)
+        {
+        System.out.print(idSel);
+        try 
+        {
+            Class.forName(driverName);
+            Connection con = DriverManager.getConnection(url, user, pass);
+            query = "Delete from Model where id = "  + idSel + ";";
+            ps = con.prepareStatement(query);
+            ps.execute();
+            createTable();
+            
+        } catch(Exception err)
+        {
+            JOptionPane.showMessageDialog(null, err.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        }
+        else
+            createTable();
+    }//GEN-LAST:event_deleteBtnActionPerformed
 
     private void manipulatePdf(String dest) throws Exception {
         Image image = new Image(ImageDataFactory.create(IMAGES[0]));
@@ -572,11 +632,7 @@ public class MainFrame extends javax.swing.JFrame {
         table1.setModel(tablemod);
         table1.setRowSelectionAllowed(true);
         table1.setColumnSelectionAllowed(false);
-        int row = table1.getSelectedRow();
-        if ((row > -1)) 
-        {
-           table1.setRowSelectionInterval(row, row);
-        }
+
         try
         { 
             Class.forName(driverName); 
@@ -654,10 +710,11 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton ClearAllBtn;
     private javax.swing.JButton btn;
     private javax.swing.JButton btnAdd;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton deleteBtn;
     private javax.swing.JButton jButton3;
     private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
