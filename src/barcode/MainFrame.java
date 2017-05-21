@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.sql.*;
-//import com.mysql.jdbc.*;
+import java.sql.*;
 import java.sql.DriverManager;
 import java.text.NumberFormat;
 import org.jdesktop.xswingx.PromptSupport;
@@ -28,14 +28,20 @@ import com.itextpdf.layout.element.Image;
 
 public class MainFrame extends javax.swing.JFrame {
 
-    String str1, str2, str3, str = new String();
+    String str1, str2, str3, str, model, info = new String();
     String driverName = "com.mysql.jdbc.Driver";
-    String url = "jdbc:mysql://localhost:3306/record";
+    String url = "jdbc:mysql://localhost:3306/mysql";
     String user = "root";
     String pass = "root";
+    String query;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
     String[] columnNames = {"No", "Model", "Info"};
     int count=1, make=-1;
     String[] IMAGES;
+    JFrame jf = new JFrame();
+    
+    
     public MainFrame() {
         initComponents();
         PromptSupport.setPrompt("Month/Year", tfYear);
@@ -221,6 +227,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         tfTab2Model.setMinimumSize(new java.awt.Dimension(30, 26));
         tfTab2Model.setPreferredSize(new java.awt.Dimension(30, 26));
+        tfTab2Model.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfTab2ModelFocusLost(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -231,6 +242,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         tfTab2Corres.setMinimumSize(new java.awt.Dimension(30, 26));
         tfTab2Corres.setPreferredSize(new java.awt.Dimension(30, 26));
+        tfTab2Corres.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfTab2CorresFocusLost(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -365,7 +381,7 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionPerformed
-        JFrame jf = new JFrame();
+        
         String code, path;
         if(str1!=null && str2!=null && str3!=null && make!=-1)
         {
@@ -425,7 +441,15 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_tfOfsetActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        createTable();
+        if(model!=null && info!=null)
+        {
+            createTable();
+            System.out.println(model + " " + info);
+        }
+        else if(model==null || info==null)
+        {
+            JOptionPane.showMessageDialog(jf, "Fill all details!");
+        }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -461,6 +485,14 @@ public class MainFrame extends javax.swing.JFrame {
         lheader.setText(str);
     }//GEN-LAST:event_tfNumFocusLost
 
+    private void tfTab2ModelFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfTab2ModelFocusLost
+        model = tfTab2Model.getText();
+    }//GEN-LAST:event_tfTab2ModelFocusLost
+
+    private void tfTab2CorresFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfTab2CorresFocusLost
+        info = tfTab2Corres.getText();
+    }//GEN-LAST:event_tfTab2CorresFocusLost
+
     private void manipulatePdf(String dest) throws Exception {
         Image image = new Image(ImageDataFactory.create(IMAGES[0]));
         PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
@@ -484,6 +516,12 @@ public class MainFrame extends javax.swing.JFrame {
         {
             Class.forName(driverName);
             Connection con = DriverManager.getConnection(url, user, pass);
+            query = "INSERT into Model (Model, Info) VALUES ('" 
+                    + model + "','" + info + "');"; 
+            ps = con.prepareStatement(query);
+            ps.execute();
+            JOptionPane.showMessageDialog(null, "Entry Added!", "Successful!", JOptionPane.INFORMATION_MESSAGE);
+            
         } catch(Exception err)
         {
             JOptionPane.showMessageDialog(null, err.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
