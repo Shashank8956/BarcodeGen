@@ -32,7 +32,7 @@ import java.util.Calendar;
 
 public class MainFrame extends javax.swing.JFrame {
 
-    String str1, str2, str3, str, model, info = new String();
+    String str1, str2, str3, str, model, info, path1 = new String();
     String driverName = "com.mysql.jdbc.Driver";
     String url = "jdbc:mysql://localhost:3306/mysql";
     String user = "root";
@@ -50,12 +50,14 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame() {
         initComponents();
         createTable();
+        createTable2();
         PromptSupport.setPrompt("Month/Year", tfYear);
         PromptSupport.setPrompt("Model", tfModel);
         PromptSupport.setPrompt("Make no", tfNum);
         PromptSupport.setPrompt("Total", tfOfset);
         PromptSupport.setPrompt("Model", tfTab2Model);
         PromptSupport.setPrompt("Model info", tfTab2Corres);
+        PromptSupport.setPrompt("Select Output Folder", tfPath);
     }
 
     @SuppressWarnings("unchecked")
@@ -64,6 +66,8 @@ public class MainFrame extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jFormattedTextField1 = new javax.swing.JFormattedTextField();
+        jButton1 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
         tab = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -93,10 +97,15 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel11 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         TableCode = new javax.swing.JTable();
-        jPanel12 = new javax.swing.JPanel();
-        pathFinder = new javax.swing.JButton();
+        jPanel14 = new javax.swing.JPanel();
+        tfPath = new javax.swing.JTextField();
+        Savebtn = new javax.swing.JButton();
 
         jFormattedTextField1.setText("jFormattedTextField1");
+
+        jButton1.setText("jButton1");
+
+        jTextField1.setText("jTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -421,35 +430,42 @@ public class MainFrame extends javax.swing.JFrame {
         TableCode.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(TableCode);
 
-        jPanel12.setLayout(new java.awt.GridBagLayout());
+        jPanel14.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 202;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(37, 35, 24, 25);
+        jPanel14.add(tfPath, gridBagConstraints);
 
-        pathFinder.setText("Set Path");
-        pathFinder.setMaximumSize(new java.awt.Dimension(100, 32));
-        pathFinder.setMinimumSize(new java.awt.Dimension(100, 32));
-        pathFinder.setPreferredSize(new java.awt.Dimension(100, 32));
-        pathFinder.addActionListener(new java.awt.event.ActionListener() {
+        Savebtn.setText("Save Location");
+        Savebtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pathFinderActionPerformed(evt);
+                SavebtnActionPerformed(evt);
             }
         });
-        jPanel12.add(pathFinder, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(36, 44, 15, 35);
+        jPanel14.add(Savebtn, gridBagConstraints);
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE)
-            .addGroup(jPanel11Layout.createSequentialGroup()
-                .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jPanel14, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
@@ -487,80 +503,94 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionPerformed
         
-        String code, path;
-        if(str1!=null && str2!=null && str3!=null && make!=-1)
-        {
-            try {
-                int input = JOptionPane.showConfirmDialog(jf
-                    , "Print for " + str + "?"
-                    ,"Confirm print"
-                    ,JOptionPane.YES_NO_OPTION);
-        
-            if(input == JOptionPane.YES_OPTION)
-                {
-                    IMAGES = new String[count];
-                    for(int i=0; i<count; i++)
-                    {   
-                        code = str1 + str2 + (make+i);
-                        path = "C:\\Users\\Spongebob\\Desktop\\" + code + ".jpg";
-                        IMAGES[i] = path;
-    
-                        Code128 barcode = new Code128();                            //Barcode Type
-                        barcode.setData(code);                                      //Barcode String
-                        barcode.setX(2);                                            //Barcode data text to encode
-                        barcode.setBarcodeWidth(350f);
-                        barcode.setBarcodeHeight(50f);
+        try {
+            String code, path;
+            Class.forName(driverName);
+            Connection con = DriverManager.getConnection(url, user, pass);
+            query = "SELECT * from path;";
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
+            if(rs.next())
+                path1 = rs.getString("Path");
+            System.out.println(path1);
+            if(str1!=null && str2!=null && str3!=null && make!=-1)
+            {
+                try {
+                    int input = JOptionPane.showConfirmDialog(jf
+                            , "Print for " + str + "?"
+                            ,"Confirm print"
+                            ,JOptionPane.YES_NO_OPTION);
                     
-                        // Generate barcode & encode into JPG format
-                        barcode.drawBarcode(path);
-
-                        //Append that additional info
-                        BufferedImage image = null;
-                        image = ImageIO.read(new File(path));
-                        Graphics2D g = (Graphics2D) image.getGraphics();
-                        g.setFont(new Font("default", Font.PLAIN, 12));
-                        g.setColor(Color.BLACK);
-                        g.drawString(info, 300, 45);
-                        g.dispose();
-
-                        ImageIO.write(image, "jpg", new File(path));
-                        
-                        int hour, min, day, month, year;
-                        java.util.Date date = new java.util.Date();
-                        Calendar cal= Calendar.getInstance();
-                        year = cal.get(Calendar.YEAR);
-                        month = cal.get(Calendar.MONTH);      // 0 to 11
-                        day = cal.get(Calendar.DAY_OF_MONTH);
-                        hour = cal.get(Calendar.HOUR_OF_DAY);
-                        min = cal.get(Calendar.MINUTE);
-        
-                        try {
-                            Class.forName(driverName); 
-                            Connection con = DriverManager.getConnection(url, user, pass);
-                            query = "INSERT into barcode (BARCODE, TIME, DATE) VALUES ('" 
-                                + code + "','" + hour + ":" + min + "','" 
-                                + day + "/" + month + "/" + year+ "');"; 
-                            ps = con.prepareStatement(query);
-                            ps.execute();
-                        
-                        }catch(Exception e)
+                    if(input == JOptionPane.YES_OPTION)
+                    {
+                        IMAGES = new String[count];
+                        for(int i=0; i<count; i++)
                         {
-                            System.out.println(e);
+                            code = str1 + str2 + (make+i);
+                            //path = "C:\\Users\\Spongebob\\Desktop\\" + code + ".jpg";
+                            path = path1 + code + ".jpg";
+                            IMAGES[i] = path;
+                            
+                            Code128 barcode = new Code128();                            //Barcode Type
+                            barcode.setData(code);                                      //Barcode String
+                            barcode.setX(2);                                            //Barcode data text to encode
+                            barcode.setBarcodeWidth(350f);
+                            barcode.setBarcodeHeight(50f);
+                            
+                            // Generate barcode & encode into JPG format
+                            barcode.drawBarcode(path);
+                            
+                            //Append that additional info
+                            BufferedImage image = null;
+                            image = ImageIO.read(new File(path));
+                            Graphics2D g = (Graphics2D) image.getGraphics();
+                            g.setFont(new Font("default", Font.PLAIN, 12));
+                            g.setColor(Color.BLACK);
+                            g.drawString(info, 300, 45);
+                            g.dispose();
+                            
+                            ImageIO.write(image, "jpg", new File(path));
+                            
+                            int hour, min, day, month, year;
+                            java.util.Date date = new java.util.Date();
+                            Calendar cal= Calendar.getInstance();
+                            year = cal.get(Calendar.YEAR);
+                            month = cal.get(Calendar.MONTH);      // 0 to 11
+                            day = cal.get(Calendar.DAY_OF_MONTH);
+                            hour = cal.get(Calendar.HOUR_OF_DAY);
+                            min = cal.get(Calendar.MINUTE);
+                            
+                            try {
+                                Class.forName(driverName);
+                                //Connection con = DriverManager.getConnection(url, user, pass);
+                                query = "INSERT into barcode (BARCODE, TIME, DATE) VALUES ('"
+                                        + code + "','" + hour + ":" + min + "','"
+                                        + day + "/" + month + "/" + year+ "');";
+                                ps = con.prepareStatement(query);
+                                ps.execute();
+                                
+                            }catch(Exception e)
+                            {
+                                System.out.println(e);
+                            }
                         }
+                        //manipulatePdf("C:\\Users\\Spongebob\\Desktop\\BarcodePDF.pdf");
+                        manipulatePdf(path1 + "Barcode.pdf");
+                        jf.dispose();                                             // Replace this by jf.dispose();
+                        createTable2();
                     }
-                    manipulatePdf("C:\\Users\\Spongebob\\Desktop\\BarcodePDF.pdf");
-                    jf.dispose();                                             // Replace this by jf.dispose();
-                    createTable2();
+                    else {
+                        jf.dispose();
+                        createTable2();
                     }
-            else {
-                jf.dispose();
-                createTable2();
+                } catch (Exception ex) {}
             }
-            } catch (Exception ex) {} 
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(jf, "Fill all details!"); 
+            else
+            {
+                JOptionPane.showMessageDialog(jf, "Fill all details!");
+            }
+        } catch (Exception ex) { 
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }//GEN-LAST:event_btnActionPerformed
@@ -740,30 +770,39 @@ public class MainFrame extends javax.swing.JFrame {
             createTable();
     }//GEN-LAST:event_editBtnActionPerformed
 
-    private void pathFinderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pathFinderActionPerformed
-        JFileChooser fc = new JFileChooser();
-        fc.setCurrentDirectory(new java.io.File("."));
-        fc.setDialogTitle("choosertitle");
-        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        fc.setAcceptAllFileFilterUsed(false);
-        jf.add(fc);
-        jf.setSize(600, 400);
-        jf.setVisible(true);
-        
-        fc.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-            File file = fc.getCurrentDirectory();
-            try {
-                String fullpath = file.getCanonicalPath(); // or getAbsolutePath()
-                System.out.println(fullpath);
-            } catch (IOException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+    private void SavebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SavebtnActionPerformed
+        path1 = tfPath.getText();
+        if(path1!=null)
+        {
+            try 
+            {
+                Class.forName(driverName);
+                Connection con = DriverManager.getConnection(url, user, pass);
+                query = "DROP table Path"; 
+                ps = con.prepareStatement(query);
+                ps.execute();
+                
+                query = "CREATE TABLE path ("
+                        +"PATH varchar(250));"; 
+                ps = con.prepareStatement(query);
+                ps.execute();
+                
+                query = "INSERT into Path (PATH) VALUES ('" 
+                        + path1 + "');";
+                ps = con.prepareStatement(query);
+                ps.execute();
+                createTable();
+            
+            } catch(Exception err)
+            {
+                JOptionPane.showMessageDialog(null, err.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-
-            }
-     
-        });         
-    }//GEN-LAST:event_pathFinderActionPerformed
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(jf, "Fill all details!");
+        }
+    }//GEN-LAST:event_SavebtnActionPerformed
 
     private void manipulatePdf(String dest) throws Exception {
         Image image = new Image(ImageDataFactory.create(IMAGES[0]));
@@ -914,16 +953,18 @@ public class MainFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ClearAllBtn;
+    private javax.swing.JButton Savebtn;
     private javax.swing.JTable TableCode;
     private javax.swing.JButton btn;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton deleteBtn;
     private javax.swing.JButton editBtn;
+    private javax.swing.JButton jButton1;
     private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -934,14 +975,15 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lheader;
-    private javax.swing.JButton pathFinder;
     private javax.swing.JTabbedPane tab;
     private javax.swing.JTable table1;
     private javax.swing.JLabel tfInfo;
     private javax.swing.JTextField tfModel;
     private javax.swing.JFormattedTextField tfNum;
     private javax.swing.JFormattedTextField tfOfset;
+    private javax.swing.JTextField tfPath;
     private javax.swing.JTextField tfTab2Corres;
     private javax.swing.JTextField tfTab2Model;
     private javax.swing.JTextField tfYear;
