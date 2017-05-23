@@ -6,13 +6,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.awt.Desktop;
+
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.*;
-import java.sql.*;
 import java.sql.*;
 import java.sql.DriverManager;
 import java.text.NumberFormat;
@@ -26,6 +27,7 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Image;
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
@@ -34,7 +36,9 @@ public class MainFrame extends javax.swing.JFrame {
 
     String str1, str2, str3, str, model, info, path1 = new String();
     String driverName = "com.mysql.jdbc.Driver";
+    //String driverName = "org.sqlite.JDBC";
     String url = "jdbc:mysql://localhost:3306/mysql";
+    //String url = "jdbc:sqlite:sample.db";
     String user = "root";
     String pass = "root";
     String query;
@@ -92,7 +96,6 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel9 = new javax.swing.JPanel();
         deleteBtn = new javax.swing.JButton();
         ClearAllBtn = new javax.swing.JButton();
-        editBtn = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -356,20 +359,6 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(6, 26, 5, 20);
         jPanel9.add(ClearAllBtn, gridBagConstraints);
 
-        editBtn.setText("Edit");
-        editBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editBtnActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.ipadx = 68;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 26, 4, 20);
-        jPanel9.add(editBtn, gridBagConstraints);
-
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -396,7 +385,7 @@ public class MainFrame extends javax.swing.JFrame {
                         .addGap(1, 1, 1)
                         .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE))
         );
 
         tab.addTab("", new javax.swing.ImageIcon(getClass().getResource("/barcode/stack2.png")), jPanel6, "Model Matrix"); // NOI18N
@@ -573,10 +562,23 @@ public class MainFrame extends javax.swing.JFrame {
                             {
                                 System.out.println(e);
                             }
+                            
                         }
                         //manipulatePdf("C:\\Users\\Spongebob\\Desktop\\BarcodePDF.pdf");
                         manipulatePdf(path1 + "Barcode.pdf");
                         jf.dispose();                                             // Replace this by jf.dispose();
+                        File file = new File(path1 + "BarcodePDF.pdf");
+//Next few lines open the PDF to print
+                            if(!Desktop.isDesktopSupported()){
+                                System.out.println("Desktop is not supported");
+                                return;
+                            }
+                            else
+                                System.out.println("Supported");
+                            Desktop desktop = Desktop.getDesktop();
+                            if(file.exists()) 
+                                desktop.open(file);
+                            
                         createTable2();
                     }
                     else {
@@ -745,31 +747,7 @@ public class MainFrame extends javax.swing.JFrame {
         else
             createTable();
     }//GEN-LAST:event_deleteBtnActionPerformed
-
-    private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
-        int row = table1.getSelectedRow();
-        String idSel = (String)table1.getValueAt(row, 0);
-        if(idSel!=null)
-        {
-        //System.out.print(idSel);
-        try 
-        {
-            Class.forName(driverName);
-            Connection con = DriverManager.getConnection(url, user, pass);
-            query = "UPDATE Model Model = '" +null+ "', Info = '" +null+ "' where id = "  + idSel + ";";
-            ps = con.prepareStatement(query);
-            ps.execute();
-            createTable();
-            
-        } catch(Exception err)
-        {
-            JOptionPane.showMessageDialog(null, err.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        }
-        else
-            createTable();
-    }//GEN-LAST:event_editBtnActionPerformed
-
+/**/
     private void SavebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SavebtnActionPerformed
         path1 = tfPath.getText();
         if(path1!=null)
@@ -819,6 +797,11 @@ public class MainFrame extends javax.swing.JFrame {
             file.delete();
         }
         doc.close();
+    }
+    
+    private void initDatabase()
+    {
+        
     }
     
     private void createTable2()                                                  // Table + Database = Tab2
@@ -958,7 +941,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton btn;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton deleteBtn;
-    private javax.swing.JButton editBtn;
     private javax.swing.JButton jButton1;
     private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JPanel jPanel1;
