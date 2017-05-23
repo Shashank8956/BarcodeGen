@@ -52,6 +52,7 @@ public class MainFrame extends javax.swing.JFrame {
     
     
     public MainFrame() {
+        initDatabase();
         initComponents();
         createTable();
         createTable2();
@@ -801,7 +802,40 @@ public class MainFrame extends javax.swing.JFrame {
     
     private void initDatabase()
     {
-        
+        try
+        { 
+            Class.forName(driverName); 
+            Connection con = DriverManager.getConnection(url, user, pass);
+            query = "USE mysql";
+            ps = con.prepareStatement(query);
+            ps.execute();
+            
+            query = "CREATE TABLE IF NOT EXISTS Model ("
+                        +"id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+                        +"Model varchar(3) UNIQUE,"
+                        +"Info varchar(5));";
+            ps = con.prepareStatement(query);
+            ps.execute();
+            
+            query = "CREATE TABLE IF NOT EXISTS Barcode ("
+                        +"No INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+                        +"Barcode varchar(9),"
+                        +"Time varchar(5),"
+                        +"Date varchar(11));";
+            ps = con.prepareStatement(query);
+            ps.execute();
+            
+            query = "CREATE TABLE IF NOT EXISTS path ("
+                        +"Path varchar(250));";
+            ps = con.prepareStatement(query);
+            ps.execute();
+            
+        }
+        catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, ex.getMessage(),"Error",
+            JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     private void createTable2()                                                  // Table + Database = Tab2
