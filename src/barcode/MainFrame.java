@@ -565,10 +565,10 @@ public class MainFrame extends javax.swing.JFrame {
                             }
                             
                         }
-                        //manipulatePdf("C:\\Users\\Spongebob\\Desktop\\BarcodePDF.pdf");
+                        //manipulatePdf("C:\\Users\\Spongebob\\Desktop\\Barcode.pdf");
                         manipulatePdf(path1 + "Barcode.pdf");
                         jf.dispose();                                             // Replace this by jf.dispose();
-                        File file = new File(path1 + "BarcodePDF.pdf");
+                        File file = new File(path1 + "Barcode.pdf");
 //Next few lines open the PDF to print
                             if(!Desktop.isDesktopSupported()){
                                 System.out.println("Desktop is not supported");
@@ -683,6 +683,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_tfYearFocusLost
 
     private void tfModelFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfModelFocusLost
+        info = null;
         str2 = tfModel.getText();
         str2 = str2.toUpperCase();
         str = str1 + str2;
@@ -698,15 +699,21 @@ public class MainFrame extends javax.swing.JFrame {
             rs = ps.executeQuery();
             if(rs.next())
                 info = rs.getString("Info");
-            
-            createTable();
+            //System.out.println("********"+info);
+            if(info==null)
+            {
+                JOptionPane.showMessageDialog(null, "Please enter a valid model no!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            else {
+                createTable();
+                tfInfo.setText(info);
+
+            }
             
         } catch(Exception err)
         {
             JOptionPane.showMessageDialog(null, err.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }finally
-        {
-            tfInfo.setText(info);
         }
     }//GEN-LAST:event_tfModelFocusLost
 
