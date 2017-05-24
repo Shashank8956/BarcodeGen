@@ -31,6 +31,8 @@ import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.name.Rename;
 
 public class MainFrame extends javax.swing.JFrame {
 
@@ -527,10 +529,10 @@ public class MainFrame extends javax.swing.JFrame {
                             barcode.setBarcodeWidth(350f);
                             barcode.setBarcodeHeight(50f);
                             
-                            // Generate barcode & encode into JPG format
+// Generate barcode & encode into JPG format
                             barcode.drawBarcode(path);
                             
-                            //Append that additional info
+//Append that additional info
                             BufferedImage image = null;
                             image = ImageIO.read(new File(path));
                             Graphics2D g = (Graphics2D) image.getGraphics();
@@ -540,6 +542,22 @@ public class MainFrame extends javax.swing.JFrame {
                             g.dispose();
                             
                             ImageIO.write(image, "jpg", new File(path));
+                            
+//Resize image to 70 x 17
+                            /*int type = image.getType() == 0? BufferedImage.TYPE_INT_ARGB : image.getType();
+             
+                            BufferedImage resizedBuffImg = new BufferedImage(70, 17, type);
+                            g = resizedBuffImg.createGraphics();
+                            g.drawImage(image, 0, 0, 70, 17, null);
+                            g.dispose();
+                            ImageIO.write(resizedBuffImg, "jpg", new File(path));
+             
+                            System.out.println("File created : "+path);*/
+                            
+                            /*Thumbnails.of(image)
+                                    .size(70, 17)
+                                    .toFile(path);*/
+/***********************************/
                             
                             int hour, min, day, month, year;
                             java.util.Date date = new java.util.Date();
@@ -598,6 +616,7 @@ public class MainFrame extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnActionPerformed
 
+    
     private void tfOfsetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfOfsetActionPerformed
 
     }//GEN-LAST:event_tfOfsetActionPerformed
