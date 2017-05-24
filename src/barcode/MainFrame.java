@@ -180,6 +180,11 @@ public class MainFrame extends javax.swing.JFrame {
                 tfYearFocusLost(evt);
             }
         });
+        tfYear.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfYearKeyTyped(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -193,6 +198,11 @@ public class MainFrame extends javax.swing.JFrame {
         tfModel.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 tfModelFocusLost(evt);
+            }
+        });
+        tfModel.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfModelKeyTyped(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -209,6 +219,11 @@ public class MainFrame extends javax.swing.JFrame {
         tfNum.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 tfNumFocusLost(evt);
+            }
+        });
+        tfNum.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfNumKeyTyped(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -696,51 +711,69 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void tfYearFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfYearFocusLost
         str1 = tfYear.getText();
-        str1 = str1.toUpperCase();
-        str = str1;
-        lheader.setText(str);
+        if(str1.length()==2)
+            {
+                str1 = str1.toUpperCase();
+                str = str1;
+                lheader.setText(str);
+            }
+        else
+        {
+            str1=null;
+            tfYear.setText(null);
+        }
     }//GEN-LAST:event_tfYearFocusLost
 
     private void tfModelFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfModelFocusLost
         info = null;
         str2 = tfModel.getText();
-        str2 = str2.toUpperCase();
-        str = str1 + str2;
-        lheader.setText(str);
-        try 
+        if(str2.length()==3)
         {
-            Class.forName(driverName);
-            Connection con = DriverManager.getConnection(url, user, pass);
-            query = "SELECT Info from Model where Model ='" 
-                    + str2 + "'";
-            //System.out.println(query);
-            ps = con.prepareStatement(query);
-            rs = ps.executeQuery();
-            if(rs.next())
-                info = rs.getString("Info");
-            //System.out.println("********"+info);
-            if(info==null)
+            str2 = str2.toUpperCase();
+            str = str1 + str2;
+            lheader.setText(str);
+            try 
             {
-                JOptionPane.showMessageDialog(null, "Please enter a valid model no!", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            else {
-                createTable();
-                tfInfo.setText(info);
+                Class.forName(driverName);
+                Connection con = DriverManager.getConnection(url, user, pass);
+                query = "SELECT Info from Model where Model ='" 
+                        + str2 + "'";
+                //System.out.println(query);
+                ps = con.prepareStatement(query);
+                rs = ps.executeQuery();
+                if(rs.next())
+                    info = rs.getString("Info");
+                //System.out.println("********"+info);
+                if(info==null)
+                {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid model no!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                else {
+                    createTable();
+                    tfInfo.setText(info);
 
-            }
+                }
             
-        } catch(Exception err)
-        {
-            JOptionPane.showMessageDialog(null, err.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } catch(Exception err)
+            {
+                JOptionPane.showMessageDialog(null, err.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
+        else
+            tfModel.setText(null);
     }//GEN-LAST:event_tfModelFocusLost
 
     private void tfNumFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfNumFocusLost
         str3 = tfNum.getText();
-        make = Integer.parseInt(str3);
-        str = str1 + str2 + str3;
-        lheader.setText(str);
+        if(str3.length()==4)
+        {
+            make = Integer.parseInt(str3);
+            str = str1 + str2 + str3;
+            lheader.setText(str);
+        }
+        else
+            tfNum.setText(null);
     }//GEN-LAST:event_tfNumFocusLost
 
     private void tfTab2ModelFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfTab2ModelFocusLost
@@ -808,6 +841,22 @@ public class MainFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(jf, "Fill all details!");
         }
     }//GEN-LAST:event_SavebtnActionPerformed
+
+    private void tfYearKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfYearKeyTyped
+ 
+        if (tfYear.getText().length() >= 2 ) // limit to 2 characters
+            evt.consume();
+    }//GEN-LAST:event_tfYearKeyTyped
+
+    private void tfModelKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfModelKeyTyped
+        if (tfModel.getText().length() >= 3 ) // limit to 3 characters
+            evt.consume();
+    }//GEN-LAST:event_tfModelKeyTyped
+
+    private void tfNumKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNumKeyTyped
+        if (tfNum.getText().length() >= 4 ) // limit to 3 characters
+            evt.consume();
+    }//GEN-LAST:event_tfNumKeyTyped
 
     private void manipulatePdf(String dest) throws Exception {
         Image image = new Image(ImageDataFactory.create(IMAGES[0]));
