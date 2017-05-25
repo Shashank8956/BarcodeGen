@@ -30,9 +30,15 @@ import com.itextpdf.layout.element.Image;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.print.PrinterJob;
 import java.util.Calendar;
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.name.Rename;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.printing.PDFPageable;
 
 public class MainFrame extends javax.swing.JFrame {
 
@@ -114,6 +120,7 @@ public class MainFrame extends javax.swing.JFrame {
         jTextField1.setText("jTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Barcode Generator");
 
         tab.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         tab.setMinimumSize(new java.awt.Dimension(564, 345));
@@ -538,9 +545,9 @@ public class MainFrame extends javax.swing.JFrame {
                             path = path1 + code + ".jpg";
                             IMAGES[i] = path;
                             
-                            Code128 barcode = new Code128();                            //Barcode Type
-                            barcode.setData(code);                                      //Barcode String
-                            barcode.setX(2);                                            //Barcode data text to encode
+                            Code128 barcode = new Code128();             //Barcode Type
+                            barcode.setData(code);                       //Barcode String
+                            barcode.setX(2);                             //Barcode data text to encode
                             barcode.setBarcodeWidth(350f);
                             barcode.setBarcodeHeight(50f);
                             
@@ -569,9 +576,9 @@ public class MainFrame extends javax.swing.JFrame {
              
                             System.out.println("File created : "+path);*/
                             
-                            /*Thumbnails.of(image)
-                                    .size(70, 17)
-                                    .toFile(path);*/
+                            Thumbnails.of(image)
+                                    .size(200, 100)
+                                    .toFile(path);
 /***********************************/
                             
                             int hour, min, day, month, year;
@@ -600,8 +607,10 @@ public class MainFrame extends javax.swing.JFrame {
                         }
                         //manipulatePdf("C:\\Users\\Spongebob\\Desktop\\Barcode.pdf");
                         manipulatePdf(path1 + "Barcode.pdf");
-                        jf.dispose();                                             // Replace this by jf.dispose();
-                        File file = new File(path1 + "Barcode.pdf");
+                        jf.dispose();
+//Calls the print function
+                        printPdf(path1+"Barcode.pdf");
+                        /*File file = new File(path1 + "Barcode.pdf");
 //Next few lines open the PDF to print
                             if(!Desktop.isDesktopSupported()){
                                 System.out.println("Desktop is not supported");
@@ -611,7 +620,7 @@ public class MainFrame extends javax.swing.JFrame {
                                 System.out.println("Supported");
                             Desktop desktop = Desktop.getDesktop();
                             if(file.exists()) 
-                                desktop.open(file);
+                                desktop.open(file);*/
                             
                         createTable2();
                     }
@@ -630,7 +639,34 @@ public class MainFrame extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_btnActionPerformed
+   
+    private void printPdf(String dest) throws Exception
+    {
+        String filename = dest; 
+        PDDocument document = PDDocument.load(new File (filename));
 
+        //takes standard printer defined by OS
+        PrintService myPrintService = PrintServiceLookup.lookupDefaultPrintService();
+        new PDPage().setRotation(90);
+        PrinterJob job = PrinterJob.getPrinterJob();
+        job.setPageable(new PDFPageable(document));
+        job.setPrintService(myPrintService);
+        //if(job.printDialog())
+            job.print();
+    }
+    
+    private static PrintService findPrintService(String printerName) 
+    {
+        PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+        for (PrintService printService : printServices) 
+        {
+            if (printService.getName().trim().equals(printerName)) 
+            {
+                return printService;
+            }
+        }
+        return null;
+    }   
     
     private void tfOfsetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfOfsetActionPerformed
 
@@ -778,10 +814,20 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void tfTab2ModelFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfTab2ModelFocusLost
         model = tfTab2Model.getText();
+        if(model.length()<3)
+        {
+            model = null;
+            tfTab2Model.setText(null);
+        }
     }//GEN-LAST:event_tfTab2ModelFocusLost
 
     private void tfTab2CorresFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfTab2CorresFocusLost
         info = tfTab2Corres.getText();
+        if(info.length()<4)
+        {
+            info=null;
+            tfTab2Corres.setText(null);
+        }
     }//GEN-LAST:event_tfTab2CorresFocusLost
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
