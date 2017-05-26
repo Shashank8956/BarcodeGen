@@ -18,18 +18,23 @@ import java.sql.*;
 import java.sql.DriverManager;
 import java.text.NumberFormat;
 import org.jdesktop.xswingx.PromptSupport;
-
+import java.util.List;
 import java.io.IOException;
 import com.itextpdf.text.*;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfReader;
+import com.itextpdf.kernel.pdf.*;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Image;
 import java.awt.Desktop;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
 import java.awt.print.PrinterJob;
 import java.util.Calendar;
 import javax.print.PrintService;
@@ -39,6 +44,21 @@ import net.coobird.thumbnailator.name.Rename;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.printing.PDFPageable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.awt.print.PrinterJob;
+import javax.print.Doc;
+import javax.print.DocFlavor;
+import javax.print.DocPrintJob;
+import javax.print.PrintException;
+import javax.print.SimpleDoc;
+import javax.print.attribute.standard.Copies;
+
+import org.apache.pdfbox.cos.COSDocument;
+import org.apache.pdfbox.pdfparser.PDFParser;
+
 
 public class MainFrame extends javax.swing.JFrame {
 
@@ -57,7 +77,7 @@ public class MainFrame extends javax.swing.JFrame {
     int count=1, make=-1;
     String[] IMAGES;
     JFrame jf = new JFrame();
-    
+    ImageIcon printImage;
     
     public MainFrame() {
         initDatabase();
@@ -515,6 +535,36 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+      
+    private void printPdf(String dest) throws Exception
+    {
+        String filename = dest; 
+        PDDocument document = PDDocument.load(new File (filename));
+
+        //takes standard printer defined by OS
+        PrintService myPrintService = PrintServiceLookup.lookupDefaultPrintService();
+        //new PDPage().setRotation(180);
+        PrinterJob job = PrinterJob.getPrinterJob();
+        job.setPageable(new PDFPageable(document));
+        job.setPrintService(myPrintService);
+        if(job.printDialog())
+            job.print();
+        document.close();
+    }
+    
+    private static PrintService findPrintService(String printerName) 
+    {
+        PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+        for (PrintService printService : printServices) 
+        {
+            if (printService.getName().trim().equals(printerName)) 
+            {
+                return printService;
+            }
+        }
+        return null;
+    }  
+    
     private void btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionPerformed
         
         try {
@@ -548,7 +598,9 @@ public class MainFrame extends javax.swing.JFrame {
                             Code128 barcode = new Code128();             //Barcode Type
                             barcode.setData(code);                       //Barcode String
                             barcode.setX(2);                             //Barcode data text to encode
-                            barcode.setBarcodeWidth(350f);
+                            //barcode.setBarcodeWidth(-50f);
+                            barcode.setLeftMargin(-15);
+                            barcode.setRightMargin(-5);
                             barcode.setBarcodeHeight(50f);
                             
 // Generate barcode & encode into JPG format
@@ -560,11 +612,10 @@ public class MainFrame extends javax.swing.JFrame {
                             Graphics2D g = (Graphics2D) image.getGraphics();
                             g.setFont(new Font("default", Font.PLAIN, 12));
                             g.setColor(Color.BLACK);
-                            g.drawString(info, 300, 45);
+                            g.drawString(info, 250, 45);
                             g.dispose();
                             
                             ImageIO.write(image, "jpg", new File(path));
-                            
 //Resize image to 70 x 17
                             /*int type = image.getType() == 0? BufferedImage.TYPE_INT_ARGB : image.getType();
              
@@ -574,11 +625,11 @@ public class MainFrame extends javax.swing.JFrame {
                             g.dispose();
                             ImageIO.write(resizedBuffImg, "jpg", new File(path));
              
-                            System.out.println("File created : "+path);*/
+                            System.out.println("File created : "+path);
                             
                             Thumbnails.of(image)
-                                    .size(200, 100)
-                                    .toFile(path);
+                                    .size(250, 150)
+                                    .toFile(path);*/
 /***********************************/
                             
                             int hour, min, day, month, year;
@@ -607,6 +658,7 @@ public class MainFrame extends javax.swing.JFrame {
                         }
                         //manipulatePdf("C:\\Users\\Spongebob\\Desktop\\Barcode.pdf");
                         manipulatePdf(path1 + "Barcode.pdf");
+                        //rotatePdf(path1 + "Barcode.pdf");
                         jf.dispose();
 //Calls the print function
                         printPdf(path1+"Barcode.pdf");
@@ -639,35 +691,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_btnActionPerformed
-   
-    private void printPdf(String dest) throws Exception
-    {
-        String filename = dest; 
-        PDDocument document = PDDocument.load(new File (filename));
-
-        //takes standard printer defined by OS
-        PrintService myPrintService = PrintServiceLookup.lookupDefaultPrintService();
-        new PDPage().setRotation(90);
-        PrinterJob job = PrinterJob.getPrinterJob();
-        job.setPageable(new PDFPageable(document));
-        job.setPrintService(myPrintService);
-        //if(job.printDialog())
-            job.print();
-    }
-    
-    private static PrintService findPrintService(String printerName) 
-    {
-        PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
-        for (PrintService printService : printServices) 
-        {
-            if (printService.getName().trim().equals(printerName)) 
-            {
-                return printService;
-            }
-        }
-        return null;
-    }   
-    
+ 
     private void tfOfsetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfOfsetActionPerformed
 
     }//GEN-LAST:event_tfOfsetActionPerformed
@@ -919,6 +943,31 @@ public class MainFrame extends javax.swing.JFrame {
             file.delete();
         }
         doc.close();
+        System.out.println("Inside manipulatePdf "+ dest);
+        rotatePdf(dest);
+        
+    }
+    
+    private void rotatePdf(String dest) throws IOException
+    {
+        
+        
+        /*PdfDocument pdfDoc = new PdfDocument(new PdfReader(dest), new PdfWriter(dest));
+        int n = pdfDoc.getNumberOfPages();
+        PdfPage page;
+        PdfNumber rotate;
+        for (int p = 1; p <= n; p++) {
+            page = pdfDoc.getPage(p);
+            rotate = page.getPdfObject().getAsNumber(PdfName.Rotate);
+            if (rotate == null) {
+                page.setRotation(90);
+            }
+            else {
+                page.setRotation((rotate.intValue() + 90) % 360);
+            }
+        }
+        System.out.println("Inside rotatePdf");
+        pdfDoc.close();*/
     }
     
     private void initDatabase()
