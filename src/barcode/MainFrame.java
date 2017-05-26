@@ -24,7 +24,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfReader;
+//import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.*;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
@@ -49,13 +49,21 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.awt.print.PrinterJob;
+import java.io.FileOutputStream;
 import javax.print.Doc;
 import javax.print.DocFlavor;
 import javax.print.DocPrintJob;
 import javax.print.PrintException;
 import javax.print.SimpleDoc;
 import javax.print.attribute.standard.Copies;
-
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.pdf.PdfDictionary;
+import com.lowagie.text.pdf.PdfNumber;
+import com.lowagie.text.pdf.PdfReader;
+import com.lowagie.text.pdf.PdfName;
+import com.lowagie.text.pdf.PdfStamper;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdfparser.PDFParser;
 
@@ -538,7 +546,44 @@ public class MainFrame extends javax.swing.JFrame {
       
     private void printPdf(String dest) throws Exception
     {
-        String filename = dest; 
+        FileInputStream psStream = null;
+        try {
+            psStream = new FileInputStream(dest);
+            } catch (FileNotFoundException ffne) {
+              ffne.printStackTrace();
+            }
+            if (psStream == null) {
+                return;
+            }
+        DocFlavor psInFormat = DocFlavor.INPUT_STREAM.PDF;
+        Doc myDoc = new SimpleDoc(psStream, psInFormat, null);  
+        PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
+        PrintService[] services = PrintServiceLookup.lookupPrintServices(psInFormat, aset);
+         
+        // this step is necessary because I have several printers configured
+        PrintService myPrinter = null;
+        for (int i = 0; i < services.length; i++){
+            
+            String svcName = services[i].toString();    
+            
+            if (svcName.contains("printer closest to me")){
+                myPrinter = services[i];
+                System.out.println("my printer found: "+svcName);
+                break;
+            }
+        }
+         
+        if (myPrinter != null) {            
+            DocPrintJob job = myPrinter.createPrintJob();
+            try {
+            job.print(myDoc, aset);
+             
+            } catch (Exception pe) {pe.printStackTrace();}
+        } else {
+            JOptionPane.showMessageDialog(jf, "No printer detected!");
+        }
+        
+        /*String filename = dest; 
         PDDocument document = PDDocument.load(new File (filename));
 
         //takes standard printer defined by OS
@@ -549,7 +594,7 @@ public class MainFrame extends javax.swing.JFrame {
         job.setPrintService(myPrintService);
         if(job.printDialog())
             job.print();
-        document.close();
+        document.close();*/
     }
     
     private static PrintService findPrintService(String printerName) 
@@ -658,7 +703,7 @@ public class MainFrame extends javax.swing.JFrame {
                         }
                         //manipulatePdf("C:\\Users\\Spongebob\\Desktop\\Barcode.pdf");
                         manipulatePdf(path1 + "Barcode.pdf");
-                        //rotatePdf(path1 + "Barcode.pdf");
+                        //rotatePdf(path1);
                         jf.dispose();
 //Calls the print function
                         printPdf(path1+"Barcode.pdf");
@@ -691,7 +736,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_btnActionPerformed
- 
+    
     private void tfOfsetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfOfsetActionPerformed
 
     }//GEN-LAST:event_tfOfsetActionPerformed
@@ -944,30 +989,30 @@ public class MainFrame extends javax.swing.JFrame {
         }
         doc.close();
         System.out.println("Inside manipulatePdf "+ dest);
-        rotatePdf(dest);
         
     }
     
     private void rotatePdf(String dest) throws IOException
     {
-        
-        
-        /*PdfDocument pdfDoc = new PdfDocument(new PdfReader(dest), new PdfWriter(dest));
-        int n = pdfDoc.getNumberOfPages();
-        PdfPage page;
-        PdfNumber rotate;
-        for (int p = 1; p <= n; p++) {
-            page = pdfDoc.getPage(p);
-            rotate = page.getPdfObject().getAsNumber(PdfName.Rotate);
-            if (rotate == null) {
-                page.setRotation(90);
-            }
-            else {
-                page.setRotation((rotate.intValue() + 90) % 360);
-            }
-        }
-        System.out.println("Inside rotatePdf");
-        pdfDoc.close();*/
+        //the number of degrees rotation
+       int degrees = 90;
+       try {
+           System.out.println("Rotating all pages by "+ degrees +" degrees.");
+
+           PdfReader reader = new PdfReader(path1 + "Barcode.pdf");
+           for (int p = 1; p <= reader.getNumberOfPages(); ++p) {
+               reader.getPageN(p).put(PdfName.ROTATE, new PdfNumber(degrees));
+           }
+           PdfStamper stp = new PdfStamper(reader, new FileOutputStream(path1 + "Barcode1.pdf"));
+           stp.close();
+          
+       }
+       catch (DocumentException e) {
+           e.printStackTrace();
+       }
+       catch (IOException e) {
+           e.printStackTrace();
+       }
     }
     
     private void initDatabase()
