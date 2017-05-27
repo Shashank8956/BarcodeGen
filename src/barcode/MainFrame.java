@@ -66,6 +66,7 @@ import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdfparser.PDFParser;
+import org.apache.pdfbox.printing.Orientation;
 
 
 public class MainFrame extends javax.swing.JFrame {
@@ -546,7 +547,7 @@ public class MainFrame extends javax.swing.JFrame {
       
     private void printPdf(String dest) throws Exception
     {
-        FileInputStream psStream = null;
+        /*FileInputStream psStream = null;
         try {
             psStream = new FileInputStream(dest);
             } catch (FileNotFoundException ffne) {
@@ -581,20 +582,20 @@ public class MainFrame extends javax.swing.JFrame {
             } catch (Exception pe) {pe.printStackTrace();}
         } else {
             JOptionPane.showMessageDialog(jf, "No printer detected!");
-        }
+        }*/
         
-        /*String filename = dest; 
+        String filename = dest; 
         PDDocument document = PDDocument.load(new File (filename));
 
         //takes standard printer defined by OS
         PrintService myPrintService = PrintServiceLookup.lookupDefaultPrintService();
         //new PDPage().setRotation(180);
         PrinterJob job = PrinterJob.getPrinterJob();
-        job.setPageable(new PDFPageable(document));
+        job.setPageable(new PDFPageable(document , Orientation.LANDSCAPE));
         job.setPrintService(myPrintService);
         if(job.printDialog())
             job.print();
-        document.close();*/
+        document.close();
     }
     
     private static PrintService findPrintService(String printerName) 
