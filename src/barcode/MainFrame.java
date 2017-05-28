@@ -66,9 +66,10 @@ import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdfparser.PDFParser;
+import org.apache.pdfbox.printing.Orientation;
 
 
-public class MainFrame extends javax.swing.JFrame {
+public class MainFrame extends javax.swing.JFrame implements Printable {
 
     String str1, str2, str3, str, model, info, path1 = new String();
     String driverName = "com.mysql.jdbc.Driver";
@@ -113,6 +114,8 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         lheader = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         btn = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
@@ -122,6 +125,7 @@ public class MainFrame extends javax.swing.JFrame {
         tfYear = new javax.swing.JTextField();
         tfModel = new javax.swing.JTextField();
         tfNum = new javax.swing.JFormattedTextField();
+        jLabel1 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         tfTab2Model = new javax.swing.JTextField();
@@ -140,6 +144,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel14 = new javax.swing.JPanel();
         tfPath = new javax.swing.JTextField();
         Savebtn = new javax.swing.JButton();
+        btnTab2Print = new javax.swing.JButton();
 
         jFormattedTextField1.setText("jFormattedTextField1");
 
@@ -154,12 +159,43 @@ public class MainFrame extends javax.swing.JFrame {
         tab.setMinimumSize(new java.awt.Dimension(564, 345));
         tab.setPreferredSize(new java.awt.Dimension(564, 345));
 
-        jPanel3.setLayout(new java.awt.GridBagLayout());
+        jPanel3.setOpaque(false);
 
         lheader.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         lheader.setText("BARCODE");
-        jPanel3.add(lheader, new java.awt.GridBagConstraints());
 
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/barcode/Raisoni-App-RGI.png"))); // NOI18N
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/barcode/Mahindra-Rise-logo-2560x1440.png"))); // NOI18N
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addGap(73, 73, 73)
+                .addComponent(lheader)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lheader)
+                .addGap(25, 25, 25))
+        );
+
+        jPanel5.setOpaque(false);
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
         btn.setText("Print");
@@ -168,8 +204,14 @@ public class MainFrame extends javax.swing.JFrame {
                 btnActionPerformed(evt);
             }
         });
-        jPanel5.add(btn, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(28, 206, 0, 207);
+        jPanel5.add(btn, gridBagConstraints);
 
+        jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         tfOfset.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
@@ -206,6 +248,7 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 184, 0, 0);
         jPanel1.add(tfInfo, gridBagConstraints);
 
+        jPanel4.setOpaque(false);
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
         tfYear.setMinimumSize(new java.awt.Dimension(30, 27));
@@ -270,6 +313,10 @@ public class MainFrame extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(25, 31, 27, 23);
         jPanel4.add(tfNum, gridBagConstraints);
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel1.setText("Made by: Shashank Singh, Ashutosh Paliwal and Shivam Singh");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -281,20 +328,26 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE))
                         .addContainerGap())))
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -475,10 +528,10 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel14.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.ipadx = 202;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(37, 35, 24, 25);
+        gridBagConstraints.insets = new java.awt.Insets(3, 56, 0, 0);
         jPanel14.add(tfPath, gridBagConstraints);
 
         Savebtn.setText("Save Location");
@@ -489,10 +542,24 @@ public class MainFrame extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(2, 69, 0, 56);
+        jPanel14.add(Savebtn, gridBagConstraints);
+
+        btnTab2Print.setText("Print Selected");
+        btnTab2Print.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTab2PrintActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(36, 44, 15, 35);
-        jPanel14.add(Savebtn, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(11, 69, 0, 56);
+        jPanel14.add(btnTab2Print, gridBagConstraints);
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
@@ -546,7 +613,7 @@ public class MainFrame extends javax.swing.JFrame {
       
     private void printPdf(String dest) throws Exception
     {
-        FileInputStream psStream = null;
+        /*FileInputStream psStream = null;
         try {
             psStream = new FileInputStream(dest);
             } catch (FileNotFoundException ffne) {
@@ -581,20 +648,23 @@ public class MainFrame extends javax.swing.JFrame {
             } catch (Exception pe) {pe.printStackTrace();}
         } else {
             JOptionPane.showMessageDialog(jf, "No printer detected!");
-        }
+        }*/
         
-        /*String filename = dest; 
+        String filename = dest; 
         PDDocument document = PDDocument.load(new File (filename));
 
         //takes standard printer defined by OS
         PrintService myPrintService = PrintServiceLookup.lookupDefaultPrintService();
         //new PDPage().setRotation(180);
         PrinterJob job = PrinterJob.getPrinterJob();
-        job.setPageable(new PDFPageable(document));
+        job.setPageable(new PDFPageable(document , Orientation.LANDSCAPE));
         job.setPrintService(myPrintService);
         if(job.printDialog())
+        {
+            job.pageDialog(new PageFormat());
             job.print();
-        document.close();*/
+        }
+        document.close();
     }
     
     private static PrintService findPrintService(String printerName) 
@@ -973,6 +1043,75 @@ public class MainFrame extends javax.swing.JFrame {
             evt.consume();
     }//GEN-LAST:event_tfNumKeyTyped
 
+    private void btnTab2PrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTab2PrintActionPerformed
+        int row = TableCode.getSelectedRow();
+        String idSel = (String)TableCode.getValueAt(row, 0);
+        System.out.println(idSel);
+        if(idSel!=null)
+        {
+            System.out.print(idSel);
+            try 
+            {
+                Class.forName(driverName);
+                Connection con = DriverManager.getConnection(url, user, pass);
+                query = "SELECT * from Barcode where id = "  + idSel + ";";
+                ps = con.prepareStatement(query);
+                rs = ps.executeQuery();
+                String code=null;
+                //if(rs.next()==true)
+                rs.next();
+                code = rs.getString("Barcode");
+                System.out.println(code);
+                //if(code!=null)
+                {
+                    Code128 barcode = new Code128();             //Barcode Type
+                    barcode.setData(code);                       //Barcode String
+                    barcode.setX(2);                             //Barcode data text to encode
+                    //barcode.setBarcodeWidth(-50f);
+                    barcode.setLeftMargin(-15);
+                    barcode.setRightMargin(-5);
+                    barcode.setBarcodeHeight(50f);
+                    
+// Generate barcode & encode into JPG format
+                    barcode.drawBarcode(path1 + code + ".jpg");
+                    //System.out.println(path1 + code + ".jpg");
+                    
+                    String filename = path1 + code + ".jpg"; 
+                    ImageIcon img = new javax.swing.ImageIcon(filename);
+                    PrintService service = PrintServiceLookup.lookupDefaultPrintService();
+                    DocPrintJob job = service.createPrintJob();
+                    DocFlavor flavor = DocFlavor.SERVICE_FORMATTED.PRINTABLE;
+                    SimpleDoc doc = new SimpleDoc(new MainFrame(), flavor, null);
+                    job.print(doc, null);
+                    System.out.println("Done");
+                    
+                }
+            } catch(Exception err)
+                {
+                    JOptionPane.showMessageDialog(null, err.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnTab2PrintActionPerformed
+
+    public int print(Graphics g, PageFormat pf, int pageIndex) 
+    {
+        Graphics2D g2d = (Graphics2D) g;
+        g.translate((int) (pf.getImageableX()), (int) (pf.getImageableY()));
+        if (pageIndex == 0) {
+            double pageWidth = pf.getImageableWidth();
+            double pageHeight = pf.getImageableHeight();
+            double imageWidth = printImage.getIconWidth();
+            double imageHeight = printImage.getIconHeight();
+            double scaleX = pageWidth / imageWidth;
+            double scaleY = pageHeight / imageHeight;
+            double scaleFactor = Math.min(scaleX, scaleY);
+            g2d.scale(scaleFactor, scaleFactor);
+            g.drawImage(printImage.getImage(), 0, 0, null);
+            return Printable.PAGE_EXISTS;
+        }
+        return Printable.NO_SUCH_PAGE;
+    }
+    
     private void manipulatePdf(String dest) throws Exception {
         Image image = new Image(ImageDataFactory.create(IMAGES[0]));
         PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
@@ -1044,6 +1183,12 @@ public class MainFrame extends javax.swing.JFrame {
                         +"Path varchar(250));";
             ps = con.prepareStatement(query);
             ps.execute();
+            
+            query = "SELECT * from Path;";
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
+            rs.next();
+            path1 = rs.getString("Path");
             
         }
         catch(Exception ex)
@@ -1189,9 +1334,13 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTable TableCode;
     private javax.swing.JButton btn;
     private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnTab2Print;
     private javax.swing.JButton deleteBtn;
     private javax.swing.JButton jButton1;
     private javax.swing.JFormattedTextField jFormattedTextField1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
