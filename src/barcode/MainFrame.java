@@ -64,6 +64,7 @@ import com.lowagie.text.pdf.PdfName;
 import com.lowagie.text.pdf.PdfStamper;
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.*;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.printing.Orientation;
@@ -121,10 +122,14 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
         jPanel1 = new javax.swing.JPanel();
         tfOfset = new javax.swing.JFormattedTextField();
         tfInfo = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         tfYear = new javax.swing.JTextField();
         tfModel = new javax.swing.JTextField();
         tfNum = new javax.swing.JFormattedTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
@@ -230,10 +235,12 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
         gridBagConstraints.ipadx = 68;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(16, 55, 20, 7);
+        gridBagConstraints.insets = new java.awt.Insets(7, 61, 6, 31);
         jPanel1.add(tfOfset, gridBagConstraints);
 
         tfInfo.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -244,9 +251,18 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
         tfInfo.setPreferredSize(new java.awt.Dimension(85, 26));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 184, 0, 0);
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 207, 0, 0);
         jPanel1.add(tfInfo, gridBagConstraints);
+
+        jLabel8.setText("Count");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(7, 61, 0, 0);
+        jPanel1.add(jLabel8, gridBagConstraints);
 
         jPanel4.setOpaque(false);
         jPanel4.setLayout(new java.awt.GridBagLayout());
@@ -265,10 +281,11 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 59;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(25, 37, 27, 26);
+        gridBagConstraints.insets = new java.awt.Insets(3, 56, 0, 0);
         jPanel4.add(tfYear, gridBagConstraints);
 
         tfModel.setMinimumSize(new java.awt.Dimension(30, 27));
@@ -284,11 +301,12 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 59;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(25, 36, 27, 26);
+        gridBagConstraints.insets = new java.awt.Insets(3, 62, 0, 0);
         jPanel4.add(tfModel, gridBagConstraints);
 
         tfNum.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
@@ -305,13 +323,38 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 83;
         gridBagConstraints.ipady = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(25, 31, 27, 23);
+        gridBagConstraints.insets = new java.awt.Insets(3, 57, 0, 42);
         jPanel4.add(tfNum, gridBagConstraints);
+
+        jLabel4.setText("Year/Month");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 56, 0, 0);
+        jPanel4.add(jLabel4, gridBagConstraints);
+
+        jLabel5.setText("Model");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 62, 0, 0);
+        jPanel4.add(jLabel5, gridBagConstraints);
+
+        jLabel6.setText("Series");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 57, 0, 0);
+        jPanel4.add(jLabel6, gridBagConstraints);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(102, 102, 102));
@@ -321,20 +364,21 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap())))
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -343,10 +387,10 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -610,7 +654,22 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-      
+    private void printImg(String dest) throws Exception
+    {
+        PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
+        pras.add(new Copies(1));
+        PrintService pss[] = PrintServiceLookup.lookupPrintServices(DocFlavor.INPUT_STREAM.JPEG, pras);
+        if (pss.length == 0)
+        throw new RuntimeException("No printer services available.");
+        PrintService ps = pss[0];
+        pras.add(OrientationRequested.LANDSCAPE);
+        System.out.println("Printing to " + ps);
+        DocPrintJob job = ps.createPrintJob();
+        FileInputStream fin = new FileInputStream(dest);
+        Doc doc = new SimpleDoc(fin, DocFlavor.INPUT_STREAM.JPEG, null);
+        job.print(doc, pras);
+        fin.close();
+    }
     private void printPdf(String dest) throws Exception
     {
         /*FileInputStream psStream = null;
@@ -727,7 +786,7 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
                             Graphics2D g = (Graphics2D) image.getGraphics();
                             g.setFont(new Font("default", Font.PLAIN, 12));
                             g.setColor(Color.BLACK);
-                            g.drawString(info, 250, 45);
+                            g.drawString(info, 220, 45);
                             g.dispose();
                             
                             ImageIO.write(image, "jpg", new File(path));
@@ -776,7 +835,7 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
                         //rotatePdf(path1);
                         jf.dispose();
 //Calls the print function
-                        printPdf(path1+"Barcode.pdf");
+                        //printPdf(path1+"Barcode.pdf");
                         /*File file = new File(path1 + "Barcode.pdf");
 //Next few lines open the PDF to print
                             if(!Desktop.isDesktopSupported()){
@@ -862,7 +921,7 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
                 query = "CREATE TABLE Model ("
                         +"id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
                         +"Model varchar(3) UNIQUE,"
-                        +"Info varchar(5));";
+                        +"Info varchar(15));";
                 ps = con.prepareStatement(query);
                 ps.execute();
                 JOptionPane.showMessageDialog(null, "All data cleared!", "Clear All!", JOptionPane.INFORMATION_MESSAGE);
@@ -962,11 +1021,6 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
 
     private void tfTab2CorresFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfTab2CorresFocusLost
         info = tfTab2Corres.getText();
-        if(info.length()<4)
-        {
-            info=null;
-            tfTab2Corres.setText(null);
-        }
     }//GEN-LAST:event_tfTab2CorresFocusLost
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
@@ -1124,10 +1178,11 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
             image.setFixedPosition(i + 1, 0, 0);                                // No need to set image position
             doc.add(image);                                                     //since each image is in new page
             File file = new File(IMAGES[i]);
+            printImg(IMAGES[i]);
             file.delete();
         }
         doc.close();
-        System.out.println("Inside manipulatePdf "+ dest);
+        //System.out.println("Inside manipulatePdf "+ dest);
         
     }
     
@@ -1167,12 +1222,12 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
             query = "CREATE TABLE IF NOT EXISTS Model ("
                         +"id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
                         +"Model varchar(3) UNIQUE,"
-                        +"Info varchar(5));";
+                        +"Info varchar(15));";
             ps = con.prepareStatement(query);
             ps.execute();
             
             query = "CREATE TABLE IF NOT EXISTS Barcode ("
-                        +"No INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+                        +"ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
                         +"Barcode varchar(9),"
                         +"Time varchar(5),"
                         +"Date varchar(11));";
@@ -1341,6 +1396,10 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
