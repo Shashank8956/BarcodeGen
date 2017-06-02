@@ -62,6 +62,7 @@ import com.lowagie.text.pdf.PdfNumber;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfName;
 import com.lowagie.text.pdf.PdfStamper;
+import javax.print.attribute.Attribute;
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.*;
@@ -656,7 +657,54 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
 
     private void printImg(String dest) throws Exception
     {
-        PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
+        // Input the file
+        FileInputStream textStream = null;
+        try {
+            textStream = new FileInputStream(dest);
+        } catch (Exception exp) {
+            return;
+        }
+
+        DocFlavor myFormat = DocFlavor.INPUT_STREAM.JPEG;
+        PageFormat format = new PageFormat();
+        format.setOrientation(PageFormat.PORTRAIT);
+
+        Doc myDoc = new SimpleDoc(textStream, myFormat, null);
+        // Build a set of attributes
+        PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
+        // aset.add(new Copies(2));
+/******************************************************************************/
+//To change image location keep changing the values (10, 10) in the line below
+//Don't change anything else. The values must be >=0
+/******************************************************************************/
+        aset.add(new MediaPrintableArea(10, 10, 300.75f, 500f,
+                MediaPrintableArea.INCH));
+        aset.add(PrintQuality.HIGH);
+
+        aset.add(new PrinterResolution(900, 1000, PrinterResolution.DPI));
+        aset.add(OrientationRequested.PORTRAIT);
+
+        PrintService[] services = PrintServiceLookup.lookupPrintServices(
+                myFormat, null);
+/******************************************************************************/
+//Ashutosh Change the number inside services[] in line 695 and 697
+//Make sure they are same and lie between 1 to 5 (inclusive)
+//If you get ArrayIndexOutOfBound error, reduce the values by 1
+/******************************************************************************/
+        if (services.length > 0) {
+            DocPrintJob job = services[1].createPrintJob();           
+            
+            for (Attribute temp : services[1].getAttributes().toArray())
+                System.out.println(temp.getName());
+
+            try {
+                job.print(myDoc, aset);
+            } catch (PrintException pe) {
+
+            }
+        }
+        
+      /*PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
         pras.add(new Copies(1));
         PrintService pss[] = PrintServiceLookup.lookupPrintServices(DocFlavor.INPUT_STREAM.JPEG, pras);
         if (pss.length == 0)
@@ -668,7 +716,7 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
         FileInputStream fin = new FileInputStream(dest);
         Doc doc = new SimpleDoc(fin, DocFlavor.INPUT_STREAM.JPEG, null);
         job.print(doc, pras);
-        fin.close();
+        fin.close();*/
     }
     private void printPdf(String dest) throws Exception
     {
