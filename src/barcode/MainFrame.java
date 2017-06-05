@@ -677,11 +677,11 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
 //To change image location keep changing the values (10, 10) in the line below
 //Don't change anything else. The values must be >=0
 /******************************************************************************/
-        aset.add(new MediaPrintableArea(10, 10, 300.75f, 500f,
-                MediaPrintableArea.INCH));
+        aset.add(new MediaPrintableArea(0, 0, 70f, 17f,
+                MediaPrintableArea.MM));
         aset.add(PrintQuality.HIGH);
 
-        aset.add(new PrinterResolution(900, 1000, PrinterResolution.DPI));
+        aset.add(new PrinterResolution(1250, 1200, PrinterResolution.DPI));
         aset.add(OrientationRequested.PORTRAIT);
 
         PrintService[] services = PrintServiceLookup.lookupPrintServices(
@@ -1148,10 +1148,10 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
     private void btnTab2PrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTab2PrintActionPerformed
         int row = TableCode.getSelectedRow();
         String idSel = (String)TableCode.getValueAt(row, 0);
-        System.out.println(idSel);
+        //System.out.println(idSel);
         if(idSel!=null)
         {
-            System.out.print(idSel);
+            //System.out.print(idSel);
             try 
             {
                 Class.forName(driverName);
@@ -1163,7 +1163,15 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
                 //if(rs.next()==true)
                 rs.next();
                 code = rs.getString("Barcode");
-                System.out.println(code);
+// Getting that additional info                
+                StringBuilder info1 = new StringBuilder();
+                info1.delete(0, 4);
+                info1.append(code.charAt(2));
+                info1.append(code.charAt(3));
+                info1.append(code.charAt(4));
+                String info2 = info1.toString();
+                System.out.println(code+" "+info1);
+                
                 //if(code!=null)
                 {
                     Code128 barcode = new Code128();             //Barcode Type
@@ -1179,12 +1187,23 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
                     //System.out.println(path1 + code + ".jpg");
                     
                     String filename = path1 + code + ".jpg"; 
-                    ImageIcon img = new javax.swing.ImageIcon(filename);
+
+//Append that additional info
+                    BufferedImage image = null;
+                    image = ImageIO.read(new File(filename));
+                    Graphics2D g = (Graphics2D) image.getGraphics();
+                    g.setFont(new Font("default", Font.PLAIN, 12));
+                    g.setColor(Color.BLACK);
+                    g.drawString(info2, 220, 45);
+                    g.dispose();      
+                    ImageIO.write(image, "jpg", new File(filename));
+                    printImg(filename);
+                    /*ImageIcon img = new javax.swing.ImageIcon(filename);
                     PrintService service = PrintServiceLookup.lookupDefaultPrintService();
                     DocPrintJob job = service.createPrintJob();
                     DocFlavor flavor = DocFlavor.SERVICE_FORMATTED.PRINTABLE;
                     SimpleDoc doc = new SimpleDoc(new MainFrame(), flavor, null);
-                    job.print(doc, null);
+                    job.print(doc, null);*/
                     System.out.println("Done");
                     
                 }
