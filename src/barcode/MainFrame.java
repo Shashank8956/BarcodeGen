@@ -73,7 +73,7 @@ import org.apache.pdfbox.printing.Orientation;
 
 public class MainFrame extends javax.swing.JFrame implements Printable {
 
-    String str1, str2, str3, str, model, info, path1 = new String();
+    String str1, str2, str3, cpy, str, model, info, path1 = new String();
     String driverName = "com.mysql.jdbc.Driver";
     //String driverName = "org.sqlite.JDBC";
     String url = "jdbc:mysql://localhost:3306/mysql";
@@ -85,7 +85,7 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
     ResultSet rs = null;
     String[] columnNames = {"No", "Model", "Info"};
     String[] columnNames2 = {"No", "Barcode", "Time", "Date"};
-    int count=1, make=-1;
+    int count=1, make=-1, copy=1;
     String[] IMAGES;
     JFrame jf = new JFrame();
     ImageIcon printImage;
@@ -99,6 +99,7 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
         PromptSupport.setPrompt("Model", tfModel);
         PromptSupport.setPrompt("Make no", tfNum);
         PromptSupport.setPrompt("Total", tfOfset);
+        PromptSupport.setPrompt("Copies", jfcopy);
         PromptSupport.setPrompt("Model", tfTab2Model);
         PromptSupport.setPrompt("Model info", tfTab2Corres);
         PromptSupport.setPrompt("Select Output Folder", tfPath);
@@ -112,6 +113,7 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
         jFormattedTextField1 = new javax.swing.JFormattedTextField();
         jButton1 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
         tab = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -124,6 +126,8 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
         tfOfset = new javax.swing.JFormattedTextField();
         tfInfo = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        jfcopy = new javax.swing.JFormattedTextField();
+        jLabel7 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         tfYear = new javax.swing.JTextField();
         tfModel = new javax.swing.JTextField();
@@ -157,6 +161,8 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
         jButton1.setText("jButton1");
 
         jTextField1.setText("jTextField1");
+
+        jTextField2.setText("jTextField2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Barcode Generator");
@@ -218,10 +224,9 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
         jPanel5.add(btn, gridBagConstraints);
 
         jPanel1.setOpaque(false);
-        jPanel1.setLayout(new java.awt.GridBagLayout());
 
         tfOfset.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
-        tfOfset.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        tfOfset.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         tfOfset.setMinimumSize(new java.awt.Dimension(28, 26));
         tfOfset.setPreferredSize(new java.awt.Dimension(28, 26));
         tfOfset.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -234,15 +239,6 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
                 tfOfsetActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.ipadx = 68;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(7, 61, 6, 31);
-        jPanel1.add(tfOfset, gridBagConstraints);
 
         tfInfo.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         tfInfo.setText("Information");
@@ -250,20 +246,56 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
         tfInfo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         tfInfo.setMinimumSize(new java.awt.Dimension(85, 26));
         tfInfo.setPreferredSize(new java.awt.Dimension(85, 26));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 207, 0, 0);
-        jPanel1.add(tfInfo, gridBagConstraints);
 
         jLabel8.setText("Count");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(7, 61, 0, 0);
-        jPanel1.add(jLabel8, gridBagConstraints);
+
+        jfcopy.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0"))));
+        jfcopy.setMaximumSize(new java.awt.Dimension(28, 26));
+        jfcopy.setMinimumSize(new java.awt.Dimension(28, 26));
+        jfcopy.setPreferredSize(new java.awt.Dimension(28, 26));
+        jfcopy.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jfcopyFocusLost(evt);
+            }
+        });
+
+        jLabel7.setText("Copies");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(207, 207, 207)
+                .addComponent(tfInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(50, 50, 50)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(jfcopy, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tfOfset, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addGap(47, 47, 47))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(9, 9, 9)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(tfInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(7, 7, 7)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tfOfset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jfcopy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         jPanel4.setOpaque(false);
         jPanel4.setLayout(new java.awt.GridBagLayout());
@@ -359,7 +391,7 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel1.setText("Made by: Shashank Singh, Ashutosh Paliwal and Shivam Singh");
+        jLabel1.setText("Made by: Shashank Singh, Rahul Gour, Ashutosh Paliwal and Shivam Singh");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -370,16 +402,15 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addContainerGap())))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -388,7 +419,7 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -681,7 +712,7 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
                 MediaPrintableArea.MM));
         aset.add(PrintQuality.HIGH);
 
-        aset.add(new PrinterResolution(1250, 1200, PrinterResolution.DPI));
+        aset.add(new PrinterResolution(650, 950, PrinterResolution.DPI));
         aset.add(OrientationRequested.PORTRAIT);
 
         PrintService[] services = PrintServiceLookup.lookupPrintServices(
@@ -692,9 +723,9 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
 //If you get ArrayIndexOutOfBound error, reduce the values by 1
 /******************************************************************************/
         if (services.length > 0) {
-            DocPrintJob job = services[1].createPrintJob();           
+            DocPrintJob job = services[0].createPrintJob();           
             
-            for (Attribute temp : services[1].getAttributes().toArray())
+            for (Attribute temp : services[0].getAttributes().toArray())
                 System.out.println(temp.getName());
 
             try {
@@ -799,7 +830,7 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
             if(rs.next())
                 path1 = rs.getString("Path");
             System.out.println(path1);
-            if(str1!=null && str2!=null && str3!=null && make!=-1)
+            if(str1!=null && str2!=null && str3!=null && make!=-1 && cpy!=null)
             {
                 try {
                     int input = JOptionPane.showConfirmDialog(jf
@@ -824,7 +855,7 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
                             barcode.setLeftMargin(-15);
                             barcode.setRightMargin(-5);
                             barcode.setBarcodeHeight(50f);
-                            
+                            barcode.setTextFont(new Font("Arial", Font.BOLD , 11));
 // Generate barcode & encode into JPG format
                             barcode.drawBarcode(path);
                             
@@ -832,7 +863,7 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
                             BufferedImage image = null;
                             image = ImageIO.read(new File(path));
                             Graphics2D g = (Graphics2D) image.getGraphics();
-                            g.setFont(new Font("default", Font.PLAIN, 12));
+                            g.setFont(new Font("default", Font.BOLD, 11));
                             g.setColor(Color.BLACK);
                             g.drawString(info, 220, 45);
                             g.dispose();
@@ -1214,6 +1245,17 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
         }
     }//GEN-LAST:event_btnTab2PrintActionPerformed
 
+    private void jfcopyFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jfcopyFocusLost
+        cpy=null;
+        cpy = jfcopy.getText();
+        if(cpy.length()<1)
+        {
+            cpy=null;
+        }
+        else
+            copy = Integer.parseInt(cpy);
+    }//GEN-LAST:event_jfcopyFocusLost
+
     public int print(Graphics g, PageFormat pf, int pageIndex) 
     {
         Graphics2D g2d = (Graphics2D) g;
@@ -1245,7 +1287,8 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
             image.setFixedPosition(i + 1, 0, 0);                                // No need to set image position
             doc.add(image);                                                     //since each image is in new page
             File file = new File(IMAGES[i]);
-            printImg(IMAGES[i]);
+            for(int j=0;j<copy;j++)
+                printImg(IMAGES[i]);
             file.delete();
         }
         doc.close();
@@ -1466,6 +1509,7 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -1482,6 +1526,8 @@ public class MainFrame extends javax.swing.JFrame implements Printable {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JFormattedTextField jfcopy;
     private javax.swing.JLabel lheader;
     private javax.swing.JTabbedPane tab;
     private javax.swing.JTable table1;
